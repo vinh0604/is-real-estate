@@ -1,0 +1,43 @@
+#slider {
+	position: relative; 
+	width: 550px; 
+	height: 250px; 
+	overflow: hidden;
+	z-index: 10;
+}
+#right { 
+}
+	
+#left {
+}	
+#slider ul { 
+	position: relative; 
+	list-style: none;
+}
+	
+#slider ul li { 
+	float: left;
+}
+#numbers { 
+	display: inline;
+	height: auto;
+	margin: 5px auto;
+	list-style: none;
+}	
+	
+#numbers li {
+	position: relative;
+	width: 10px; height: 10px; 
+	cursor: pointer;
+	text-indent: -99999px;
+	margin: 5px;
+	background-color: #BEDBF2;
+	border-radius: 50px;
+	-moz-border-radius: 50px;
+	-webkit-border-radius: 50px;
+	display: inline-block;
+}
+	
+#numbers .activenum { 
+	background-color: #3586C6;
+}
