@@ -13,12 +13,12 @@
 .pagination a, .pagination span {
     display: block;
     float: left;
-    padding: 0.3em 0.3em;
+    padding: 1px;
     margin-right: 1px;
 	margin-bottom: 5px;
 	height: 15px;
 	width: 15px;
-	border-radius: 10px;
+	border-radius: 15px;
 	font-weight: bold;
 }
 
