@@ -36,7 +36,7 @@
 						"alertText":"* Không phải số nguyên hợp lệ"},
 					"number":{
 						// Number, including positive, negative, and floating decimal. Credit: bassistance
-						"regex": /^[\-\+]?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)$/,
+						"regex": /^[\-\+]?(?:\d+|\d{1,3}(?:,\d{3})+)(?:(\.\d+)?)$/,
 						"alertText":"* Không phải số thực hợp lệ"},
 					"date":{
 						// Date in ISO format. Credit: bassistance
