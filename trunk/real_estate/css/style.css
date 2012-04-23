@@ -290,7 +290,7 @@ html, body {
 #news-list-box ul li {
 	margin: 10px 0;
 	display: inline-block;
-	width: 300px;
+	width: 230px;
 }
 #news-list-box ul li:hover {
 	background-color: #CEE6FF;
@@ -475,17 +475,17 @@ html, body {
 	font-weight: bold;
 	color: #2EB8E6;
 }
-.news-image-wrap .news-operation {
+.news-operation {
 	margin-top: 10px;
 }
-.news-image-wrap .news-operation .blue_btn {
+.news-operation .blue_btn {
 	display: inline-block;
 }
-.news-image-wrap .news-operation .blue_btn a{
+.news-operation .blue_btn a{
 	font-size: 12px;
 	padding: 1px 10px 4px 10px;
 }
-.news-image-wrap .news-operation .blue_btn .right_btn {
+.news-operation .blue_btn .right_btn {
 	padding-top: 4px;
 }
 .main-content {
@@ -584,4 +584,33 @@ html, body {
 .form_wrapper .section_header {
 	font-size: 20px;
 	color: #57ABE8;
+}
+#map_canvas {
+	background: none repeat scroll 0 0 padding-box #fff;
+	border: 2px solid #57ABE8;
+	border-radius: 9px 9px 9px 9px;
+}
+.news_title {
+	font-size: 20px;
+	color: #57ABE8;
+}
+.news_detail td {
+	vertical-align: top;
+}
+.news_detail td.title {
+	font-weight: bold;
+}
+.price {
+	font-size: 18px;
+	font-weight: bold; 
+	color: #06C;
+}
+.module {
+	border-radius: 5px 5px 0 0;
+	border: 1px solid #267BB6;
+}
+.sub-title {
+	font-size: 16px;
+	color: #57ABE8;
+	font-weight: bold;
 }
