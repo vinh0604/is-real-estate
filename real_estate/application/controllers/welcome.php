@@ -19,7 +19,8 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->load->view('welcome_message');
+		$data['topBar'] = $this->load->view('topBar',null,true);
+		$this->load->view('advancedSearchPage',$data);
 	}
 }
 
