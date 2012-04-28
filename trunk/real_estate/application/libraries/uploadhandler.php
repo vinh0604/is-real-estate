@@ -15,10 +15,12 @@ class UploadHandler
     protected $options;
     
     function __construct($options=null) {
+    	$CI =& get_instance(); 
+		$base_url = $CI->config->item('base_url');
         $this->options = array(
-            'script_url' => $this->getFullUrl().'/',
-            'upload_dir' => dirname($_SERVER['SCRIPT_FILENAME']).'/files/',
-            'upload_url' => $this->getFullUrl().'/files/',
+            'script_url' => $this->$base_url.'/',
+            'upload_dir' => '../../images/files/',
+            'upload_url' => $this->$base_url.'images/files/',
             'param_name' => 'files',
             // Set the following option to 'POST', if your server does not support
             // DELETE requests. This is a parameter sent to the client:
@@ -38,15 +40,15 @@ class UploadHandler
                 // uploaded images. You can also add additional versions with
                 // their own upload directories:
                 'large' => array(
-                    'upload_dir' => dirname($_SERVER['SCRIPT_FILENAME']).'/files/',
-                    'upload_url' => $this->getFullUrl().'/files/',
+                    'upload_dir' => '../../images/files/',
+                    'upload_url' => $base_url.'images/files/',
                     'max_width' => 1920,
                     'max_height' => 1200,
                     'jpeg_quality' => 95
                 ),
                 'thumbnail' => array(
-                    'upload_dir' => dirname($_SERVER['SCRIPT_FILENAME']).'/thumbnails/',
-                    'upload_url' => $this->getFullUrl().'/thumbnails/',
+                    'upload_dir' => '../../images/thumbnails/',
+                    'upload_url' => $base_url.'images/thumbnails/',
                     'max_width' => 80,
                     'max_height' => 80
                 )

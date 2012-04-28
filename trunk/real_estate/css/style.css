@@ -614,3 +614,57 @@ html, body {
 	color: #57ABE8;
 	font-weight: bold;
 }
+.add_btn, .del_btn {
+	padding: 3px 5px;
+	cursor: pointer;
+	border-style: none;
+	color: #fff;
+	border-radius: 5px;
+	-webkit-box-shadow:  1px 1px 3px 0px #888;
+	-moz-box-shadow:  1px 1px 3px 0px #888;
+	box-shadow:  1px 1px 3px 0px #888;
+}
+.add_btn img, .del_btn img {
+	margin-right: 5px;
+}
+.add_btn {
+	background-image: linear-gradient(bottom,#257DC2 0%,#57ABE8 94%);
+	background-image: -o-linear-gradient(bottom,#257DC2 0%,#57ABE8 94%);
+	background-image: -moz-linear-gradient(bottom,#257DC2 0%,#57ABE8 94%);
+	background-image: -webkit-linear-gradient(bottom,#257DC2 0%,#57ABE8 94%);
+	background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#257DC2),color-stop(0.94,#57ABE8));
+	border: 1px solid #2B7DB9;
+	float: right;
+}
+.add_btn:hover {
+	background-image: linear-gradient(bottom,#1371BB 0%,#6CBAF1 94%);
+	background-image: -o-linear-gradient(bottom,#1371BB 0%,#6CBAF1 94%);
+	background-image: -moz-linear-gradient(bottom,#1371BB 0%,#6CBAF1 94%);
+	background-image: -webkit-linear-gradient(bottom,#1371BB 0%,#6CBAF1 94%);
+	background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#2981C5),color-stop(0.94,#6CBAF1));
+}
+.del_btn {
+	background-image: -moz-linear-gradient(top, #EE5F5B, #BD362F);
+	background-image: -ms-linear-gradient(top, #EE5F5B, #BD362F);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#EE5F5B), to(#BD362F));
+	background-image: -webkit-linear-gradient(top, #EE5F5B, #BD362F);
+	background-image: -o-linear-gradient(top, #EE5F5B, #BD362F);
+	background-image: linear-gradient(top, #EE5F5B, #BD362F);
+	border: 1px solid;
+	border-color: #EE5F5B;
+	float: left;
+}
+.del_btn:hover {
+	background-image: linear-gradient(bottom,#D8403D 0%,#F78B88 94%);
+	background-image: -o-linear-gradient(bottom,#D8403D 0%,#F78B88 94%);
+	background-image: -moz-linear-gradient(bottom,#D8403D 0%,#F78B88 94%);
+	background-image: -webkit-linear-gradient(bottom,#D8403D 0%,#F78B88 94%);
+	background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#D8403D),color-stop(0.94,#F78B88));
+}
+.btn_wrap {
+	margin-bottom: 5px;
+	height: 30px;
+}
+.table_wrap {
+	clear: both;
+}
