@@ -74,7 +74,6 @@ class Pipe
 				$apply = true;
 				foreach( $paths as $path ) {
 					if ( $this->_matches($path) ) {
-                                                log_message($path);
 						return false;
 					}
 				}

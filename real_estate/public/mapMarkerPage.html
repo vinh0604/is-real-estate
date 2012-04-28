@@ -1,0 +1,160 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head id="Head1">
+<title>
+	RE2Y - Real Estate to You
+</title>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <style type="text/css">
+    .map { width:804px; padding:10px; overflow:hidden;}
+    .map img {}
+	.info { width:804px; overflow:hidden;}
+    .infoL { float:left; margin:5px 0 0 0;padding-top:0px}
+    .infoL p { font:12px Arial; color:#0096db; font-weight:bold;margin-top:0px}
+    .infoL .note { width:483px; padding:7px; height:50px; background-color:#e8e8e8; overflow:hidden; font:12px Arial; color:#000000; font-weight:bold; line-height:16px;}		
+	
+	
+    .infoR { float:right; margin:20px 2px 0 0;}
+    .button { 
+    	font:12px Arial; color:#fff; font-weight: bold; cursor:pointer;
+    	background-image: linear-gradient(bottom,#257DC2 0%,#57ABE8 94%);
+		background-image: -o-linear-gradient(bottom,#257DC2 0%,#57ABE8 94%);
+		background-image: -moz-linear-gradient(bottom,#257DC2 0%,#57ABE8 94%);
+		background-image: -webkit-linear-gradient(bottom,#257DC2 0%,#57ABE8 94%);
+		background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#257DC2),color-stop(0.94,#57ABE8));
+		border: 1px solid #2B7DB9;
+		border-radius: 5px;
+    }
+    .button:hover { 
+    	background-image: linear-gradient(bottom,#1371BB 0%,#6CBAF1 94%);
+		background-image: -o-linear-gradient(bottom,#1371BB 0%,#6CBAF1 94%);
+		background-image: -moz-linear-gradient(bottom,#1371BB 0%,#6CBAF1 94%);
+		background-image: -webkit-linear-gradient(bottom,#1371BB 0%,#6CBAF1 94%);
+		background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#2981C5),color-stop(0.94,#6CBAF1));
+    }
+    #map_canvas {
+		background: none repeat scroll 0 0 padding-box #fff;
+		border: 2px solid #57ABE8;
+		border-radius: 9px 9px 9px 9px;
+	}
+</style>
+
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDS5bb-pXbt4N27kkA9y1AS0nGxgciqTiU&sensor=true&language=vi" type="text/javascript"></script>
+    <script type="text/javascript">
+        var map = null;
+        var geocoder = null;
+        var marker = null;
+		var infowindow = new google.maps.InfoWindow();
+		var myLatlng = new google.maps.LatLng(10.75, 106.67);
+		function success(position) {
+			myLatlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+			var myOptions = {zoom: 16,
+							  center: myLatlng,
+							  mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+            geocoder = new google.maps.Geocoder();
+
+            
+            marker = marker = new google.maps.Marker({position: myLatlng,
+													  draggable: true
+			});
+			google.maps.event.addListener(marker, 'dragend', function() {
+			    document.getElementById("txtLat").value=marker.getPosition().lat();
+                document.getElementById("txtLng").value=marker.getPosition().lng(); 
+                showAddress();
+			});
+			marker.setMap(map);
+			showAddress();
+		}
+		function error() {
+			var myOptions = {zoom: 16,
+							  center: myLatlng,
+							  mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+            geocoder = new google.maps.Geocoder();
+
+            
+            marker = marker = new google.maps.Marker({position: myLatlng,
+													  draggable: true
+			});
+			google.maps.event.addListener(marker, 'dragend', function() {
+			    document.getElementById("txtLat").value=marker.getPosition().lat();
+                document.getElementById("txtLng").value=marker.getPosition().lng(); 
+                showAddress();
+			});
+			marker.setMap(map);
+			showAddress();
+		}
+        function initialize() {
+        	if (navigator.geolocation) {
+			  	navigator.geolocation.getCurrentPosition(success, error);
+			} else {
+				error();
+			}
+        }
+        
+        function showAddress() 
+        { 
+        	var latlng = new google.maps.LatLng(marker.getPosition().lat(),marker.getPosition().lng());
+            geocoder.geocode({'latLng': latlng}, function(results, status) {
+            	if (status == google.maps.GeocoderStatus.OK) {
+            		if (results[0]) {
+			          infowindow.setContent(results[0].formatted_address);
+			          infowindow.open(map, marker);
+			        }
+            	}
+            });
+        }
+        function LocationFinished()
+        {
+            window.opener.document.getElementById("lat").value = document.getElementById("txtLat").value;
+            window.opener.document.getElementById("lng").value = document.getElementById("txtLng").value;                                                         
+            document.getElementById("idHoanTat").style.display = "block";           
+        }
+         function LocationFinishedClose()
+        {
+            window.opener.document.getElementById("lat").value = document.getElementById("txtLat").value;
+            window.opener.document.getElementById("lng").value = document.getElementById("txtLng").value;                        
+            window.close();
+        }
+    </script>                
+</head>
+<body onload="initialize();">
+    <form name="form1" method="post" action="#" id="form1">
+<div>
+</div>
+
+     <div class="map">
+            <div id="map_canvas"  style="width: 100%; height: 400px; padding-bottom:10px; position:relative;"></div>            
+            <input type="hidden" name="txtLat" id="txtLat" />
+            <input type="hidden" name="txtLng" id="txtLng" />
+	        <div class="info">
+		        <div class="infoL">
+			        <p style="display:none" id="idHoanTat"><img src="../images/ico_check.gif" width="22" height="22" alt="" />&nbsp;Vị trí tài sản đã được cập nhật !</p>
+			        <div class="note">
+				        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+				          <tr>
+					        <td width="9%"><img src="../images/ico.gif" width="36" height="44" alt="" /></td>
+					        <td width="91%">Sử dụng con trỏ chuột di chuyển icon (<img src="../images/ico1.gif" width="12" height="16" alt="" />    ) đến vị trí của tài sản trên bản đồ. Nhấn nút “Cập nhật vị trí” để cập nhật vị trí cho tài sản.</td>
+				          </tr>
+				        </table>
+
+			        </div>
+		        </div>
+		        <div class="infoR">
+		            <input type="button" name="cmdFinish" class="button" id="cmdFinish" value="Cập nhật vị trí" onclick="LocationFinished();" />&nbsp;
+                    <input type="button" name="cmdClose" class="button" id="cmdClose" value="Đóng lại" onclick="LocationFinishedClose();"  />
+		        </div>
+
+	        </div>
+        </div>
+      
+             
+    </form>
+</body>
+</html>

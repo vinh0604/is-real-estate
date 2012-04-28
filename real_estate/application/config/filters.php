@@ -15,8 +15,8 @@
 */
 $filter['authenticate'] = array(
 	'include', array('realestate/index,addnewitem,updateitem,deleteitem,accept,deny,deleteitem,getdetailforreview,sendreviewemail',
-					 'imageupload/*',
-					 'user/*')
+					 'user/*',
+					 'imageupload/*')
 );
 $filter['authorize'] = array(
 	'include', array('realestate/accept,deny,getdetailforreview,sendreviewemail',

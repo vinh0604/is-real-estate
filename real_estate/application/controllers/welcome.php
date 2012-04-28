@@ -20,7 +20,7 @@ class Welcome extends CI_Controller {
 	public function index()
 	{
 		$data['topBar'] = $this->load->view('topBar',null,true);
-		$this->load->view('advancedSearchPage',$data);
+		$this->load->view('addImagePage',$data);
 	}
 }
 
