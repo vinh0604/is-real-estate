@@ -4,7 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 	<title>RE2Y - Real Estate to You</title>
 	<!--[if IE]>
-		<link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen"/>
+		<link rel="stylesheet" href="<?=base_url()?>css/blueprint/ie.css" type="text/css" media="screen"/>
 	<![endif]-->
 	<link rel="stylesheet" href="<?=base_url()?>css/blueprint/screen.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="<?=base_url()?>css/blueprint/print.css" type="text/css" media="print"/>

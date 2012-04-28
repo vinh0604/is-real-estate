@@ -20,7 +20,9 @@ class Login extends CI_Controller {
      */
 
     function index() {
-        
+        $data['topBar'] = $this->load->view('topBar',null,true);
+		
+		$this->load->view('loginPage',$data);
     }
 
     /*

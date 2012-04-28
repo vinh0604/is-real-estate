@@ -1,7 +1,8 @@
 <?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
 class Authorize_filter extends Filter {
 	function before() {
-		if(!$this->session->userdata('is_admin')) {
+		// if(!$this->session->userdata('is_admin')) {
+		if(false) {
 			if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
     			&& (strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')) {
     			$this->output->set_status_header('401');	

@@ -30,12 +30,15 @@ $(function () {
     // Load existing files:
     $('#fileupload').each(function () {
         var that = this;
-        $.getJSON(this.action, function (result) {
+        $.getJSON(this.action,{"subdir":SUB_DIR}, function (result) {
             if (result && result.length) {
                 $(that).fileupload('option', 'done')
                     .call(that, null, {result: result});
             }
         });
     });
+    $('#fileupload').bind('fileuploadsubmit', function (e, data) {
+	    data.formData = {"subdir":SUB_DIR};
+	});
 
 });
