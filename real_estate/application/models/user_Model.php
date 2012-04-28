@@ -11,85 +11,156 @@ class User_Model extends CI_Model {
         parent::__construct();
     }
 
-    //Get User by ID
-    //Parameter $userID
-    //return User
+    /*
+     * Author: Hiep
+     * Summary: Get User by ID
+     * Parameter 1: UserID
+     * Return: Record of User by ID
+     */
+
     function GetUser($userID) {
         $query = 'SELECT * FROM "user" WHERE USERID = ?';
         $result = $this->db->query($query, array($userID))->result();
         return $result;
     }
 
-    //Get All of User
-    //return list of user whose duty is normal user
+    /*
+     * Author: Hiep
+     * Summary: Get All of User
+     * Parameter 1:
+     * Parameter 2:
+     * Return: list of user whose duty is normal user
+     */
+
     function GetALlUsers() {
         $query = 'SELECT * FROM "user" WHERE DUTY = \'Người dùng\'';
         $result = $this->db->query($query)->result();
         return $result;
     }
 
-    //Get All of Admin
-    //return list of user whose duty is admin
+    /*
+     * Author: Hiep
+     * Summary: Get all of Admins
+     * Return: list of user whose duty is admin
+     */
+
     function GetALlAdmins() {
         $query = 'SELECT * FROM "user" WHERE DUTY = \'Quản trị\'';
         $result = $this->db->query($query)->result();
         return $result;
     }
 
-    //Add New User
-    //$newUser is an array contains attributes of new user
-    //return the result of executing of query
-    function AddNewUser($newUser){
-        $query = $this->db->insert('"user"',$newUser);
+    /*
+     * Author: Hiep
+     * Summary: Add New User
+     * Parameter 1: $newUser is an array contains attributes of new user
+     * Return: the result of executing of query
+     */
+
+    function AddNewUser($newUser) {
+        $query = $this->db->insert('"user"', $newUser);
         return $query;
     }
-    
-    //Delete User
-    //parameter $userID
-    //return the result of executing of query
-    function DeleteUser($userID){
+
+    /*
+     * Author: Hiep
+     * Summary:  Delete User
+     * Parameter 1: user ID
+     * Return: the result of Executing of query
+     */
+
+    function DeleteUser($userID) {
         $query = 'DELETE FROM "user" WHERE USERID = ?';
         $result = $this->db->query($query, array($userID));
         return $result;
     }
-    
-    //Update User
-    function UpdateUser(){
-    
-    }
-    
-    //Change Password
-    //parameter $userID, $password is the new password and is encoded with MD5
-    //return the result of executing of query
-    function ChangePassword($userID,$password){
-        $query = "UPDATE USER SET PASSWORD = ? WHERE USERID = ?";
-        $result = $this->db->query($query,array ($password, $userID));
-        return $result;
-    }
-    
-    
-    function CheckOldPassword($userID,$oldPassword){
-    
-    }
-    
-    //Validate Data Format
-    function ValidateDataFormat(){
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function UpdateUser() {
         
     }
-    
-    //Validate User
-    function ValidateUser(){
-    
+
+    /*
+     * Author: Hiep
+     * Summary: Change Password
+     * Parameter 1: $userID
+     * Parameter 2: $password is the new password and is encoded with MD5
+     * Return: the result of executing of query
+     */
+
+    function ChangePassword($userID, $password) {
+        $query = "UPDATE USER SET PASSWORD = ? WHERE USERID = ?";
+        $result = $this->db->query($query, array($password, $userID));
+        return $result;
     }
-    
-    //Validate Unique
-    function ValidateUnique(){
-    
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function CheckOldPassword($userID, $oldPassword) {
+        
     }
-    
-    //Find By ID
-    function FindByID(){
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function ValidateDataFormat() {
+        
     }
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function ValidateUser() {
+        
+    }
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function ValidateUnique() {
+        
+    }
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function FindByID() {
+        
+    }
+
 }
 
 ?>

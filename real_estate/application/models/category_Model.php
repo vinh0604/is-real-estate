@@ -11,8 +11,11 @@ class Category_Model extends CI_Model{
         parent::__construct();
     }
     
-    //Get all categories of Real Estate
-    //return list of category
+    /*
+     * Author: Hiep
+     * Summary: Get all of categories of RealEstate
+     * Return: list of Categories
+     */
     function GetCategories(){
         $query = "SELECT * FROM CATEGORY";
         $result = $this->db->query($query)->result();

@@ -11,8 +11,12 @@ class City_Model extends CI_Model {
         parent::__construct();
     }
 
-    //Get all city
-    //return list of city
+    
+    /*
+     * Author: Hiep
+     * Summary: Get all of cities
+     * Return: list of Cities
+     */
     function GetCities() {
         $query = "SELECT * FROM CITY";
         $result = $this->db->query($query)->result();
