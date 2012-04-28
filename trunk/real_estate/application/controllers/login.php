@@ -5,18 +5,36 @@
  * and open the template in the editor.
  */
 
-class Login extends CI_Controller{
+class Login extends CI_Controller {
 
     function __construct() {
         parent::__construct();
     }
-    
-    function index(){
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function index() {
         
     }
-    
-    function Login(){
-    
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function Login() {
+        
     }
+
 }
+
 ?>

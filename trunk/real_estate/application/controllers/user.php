@@ -11,34 +11,86 @@ class User extends CI_Controller {
         parent::__construct();
     }
 
-    //Redirect to Manage User page
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
     function index() {
         
     }
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
 
     function GetUser() {
         
     }
 
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
     function AddNewUser() {
         
     }
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
 
     function DeleteUser() {
         
     }
 
-    //Redirect to change password page
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
     function Change() {
         
     }
 
-    //Check old password
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
     function CheckOldPassword() {
         
     }
 
-    //Call to change password in model class
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
     function ChangePassword() {
         
     }
