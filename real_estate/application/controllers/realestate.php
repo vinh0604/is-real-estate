@@ -5,55 +5,144 @@
  * and open the template in the editor.
  */
 
-class Realestate extends CI_Controller{
-    
+class Realestate extends CI_Controller {
+
     function __construct() {
         parent::__construct();
     }
-    
-    function index(){
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function index() {
         
     }
-    
-    function GetCities(){
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function GetCities() {
         
     }
-    
-    function GetCategories(){
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function GetCategories() {
         
     }
-    
-    function GetDistrictByCityID(){
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function GetDistrictByCityID() {
         
     }
-    
-    function AddNewItem(){
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function AddNewItem() {
         
     }
-    
-    function UpdateItem(){
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function UpdateItem() {
         
     }
-    
-    function DeleteItem(){
-    
-    }
-    
-    function Accept(){
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function DeleteItem() {
         
     }
-    
-    function Deny(){
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function Accept() {
         
     }
-    
-    function GetDetailForReview(){
-    
-    }
-    
-    function SendReviewEmail(){
-    
-    }
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function Deny() {
         
+    }
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function GetDetailForReview() {
+        
+    }
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function SendReviewEmail() {
+        
+    }
+
 }
+
 ?>

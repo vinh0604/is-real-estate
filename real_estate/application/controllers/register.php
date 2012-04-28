@@ -5,23 +5,48 @@
  * and open the template in the editor.
  */
 
-class Register extends CI_Controller{
-    
+class Register extends CI_Controller {
+
     function __construct() {
         parent::__construct();
     }
-    
-    function index(){
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function index() {
         
     }
-    
-    
-    function Register(){
-    
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function Register() {
+        
     }
-    
-    function SendEmail(){
-    
+
+    /*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+
+    function SendEmail() {
+        
     }
+
 }
+
 ?>
