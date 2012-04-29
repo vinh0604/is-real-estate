@@ -20,10 +20,20 @@
 	</ul>
 	<span id="top-right-area">
 		<a href="<?=base_url()?>index.php/shoppingcart" class="cart_btn">
-			<span class="cart_item_num"><?=2?></span>
+			<span class="cart_item_num"><?=array_key_exists('cart_num',$userdata) ? $userdata['cart_num'] : 0 ?></span>
 			<span class="cart_img_holder">Giỏ tin</span>
 		</a>
 		<ul class="login_signup_wrap">
+			<?php if (array_key_exists('user_id',$userdata) && $userdata['user_id']): ?>
+			<li class="blue_btn" style="float: left">
+				<a href="<?=base_url()?>index.php/user" class="left_btn">Tài khoản</a>
+			</li>
+			<li class="blue_btn">
+				<a href="<?=base_url()?>index.php/logout" class="right_btn">Đăng xuất
+					<div class="right_arrow"></div>
+				</a>
+			</li>
+			<?php else: ?>
 			<li class="blue_btn" style="float: left">
 				<a href="<?=base_url()?>index.php/login" class="left_btn">Đăng nhập</a>
 			</li>
@@ -32,6 +42,7 @@
 					<div class="right_arrow"></div>
 				</a>
 			</li>
+			<?php endif;?>
 		</ul>
 	</span>
 </div>

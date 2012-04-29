@@ -33,8 +33,12 @@ function &get_pipe()
 function pre_filter()
 {
 	$CI =& get_instance();
-	$CI->session->set_userdata('user_id',2);
-	$CI->session->set_userdata('is_admin',true);
+	if (!$CI->session->userdata('user_id')) {
+		$CI->session->set_userdata('user_id',2);
+	}
+	if (!$CI->session->userdata('is_admin')) {
+		$CI->session->set_userdata('is_admin',true);
+	}
 	$PIPE = get_pipe();
 	$PIPE->process_before();
 }
