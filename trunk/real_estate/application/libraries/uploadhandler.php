@@ -15,10 +15,11 @@ error_reporting(E_ALL | E_STRICT);
 class UploadHandler
 {
     private $options;
+	private $CI;
     
     function __construct($options=null) {
-       	$CI =& get_instance(); 
-		$base_url = $CI->config->item('base_url');
+       	$this->CI =& get_instance(); 
+		$base_url = $this->CI->config->item('base_url');
 	    $this->options = array(
 	        'script_url' => $base_url.'index.php/imageupload',
 	        'upload_dir' => FCPATH.'images/files/',
@@ -263,6 +264,7 @@ class UploadHandler
                     $append_file ? FILE_APPEND : 0
                 );
             }
+			$this->CI->db->query('INSERT INTO PHOTO(URL,REALESTATEID) VALUES(?,?)',array($file->name,str_replace('/', '', $subdir)));
             $file_size = filesize($file_path);
             if ($file_size === $file->size) {
                 $suburl = str_replace('%2F', '/', rawurlencode($subdir));
@@ -354,6 +356,7 @@ class UploadHandler
         }
         $file_path = $this->options['upload_dir'].$subdir.$file_name;
         $success = is_file($file_path) && $file_name[0] !== '.' && unlink($file_path);
+		$this->CI->db->query('DELETE FROM PHOTO WHERE URL = ? AND REALESTATEID = ?',array($file_name,str_replace('/', '', $subdir)));
         if ($success) {
             $this->delete_empty_subdirs($subdir);
             foreach($this->options['image_versions'] as $version => $options) {
