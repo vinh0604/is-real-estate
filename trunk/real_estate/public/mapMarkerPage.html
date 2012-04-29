@@ -51,27 +51,17 @@
 		var myLatlng = new google.maps.LatLng(10.75, 106.67);
 		function success(position) {
 			myLatlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-			var myOptions = {zoom: 16,
-							  center: myLatlng,
-							  mapTypeId: google.maps.MapTypeId.ROADMAP
-			};
-			map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-            geocoder = new google.maps.Geocoder();
-
-            
-            marker = marker = new google.maps.Marker({position: myLatlng,
-													  draggable: true
-			});
-			google.maps.event.addListener(marker, 'dragend', function() {
-			    document.getElementById("txtLat").value=marker.getPosition().lat();
-                document.getElementById("txtLng").value=marker.getPosition().lng(); 
-                showAddress();
-			});
-			marker.setMap(map);
+			map.setCenter(myLatlng);
+			marker.setPosition(myLatlng);
+			document.getElementById("txtLat").value=marker.getPosition().lat();
+            document.getElementById("txtLng").value=marker.getPosition().lng(); 
 			showAddress();
 		}
 		function error() {
-			var myOptions = {zoom: 16,
+			
+		}
+        function initialize() {
+        	var myOptions = {zoom: 16,
 							  center: myLatlng,
 							  mapTypeId: google.maps.MapTypeId.ROADMAP
 			};
@@ -79,8 +69,8 @@
             geocoder = new google.maps.Geocoder();
 
             
-            marker = marker = new google.maps.Marker({position: myLatlng,
-													  draggable: true
+            marker = new google.maps.Marker({position: myLatlng,
+											 draggable: true
 			});
 			google.maps.event.addListener(marker, 'dragend', function() {
 			    document.getElementById("txtLat").value=marker.getPosition().lat();
@@ -88,9 +78,9 @@
                 showAddress();
 			});
 			marker.setMap(map);
+			document.getElementById("txtLat").value=marker.getPosition().lat();
+            document.getElementById("txtLng").value=marker.getPosition().lng(); 
 			showAddress();
-		}
-        function initialize() {
         	if (navigator.geolocation) {
 			  	navigator.geolocation.getCurrentPosition(success, error);
 			} else {
