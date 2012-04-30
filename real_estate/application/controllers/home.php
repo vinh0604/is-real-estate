@@ -40,6 +40,19 @@ class Home extends CI_Controller {
 		$realEstates = $this->realEstate_Model->GetNearRealEstates($lat, $lng, $distance);
 		$this->output->set_output(json_encode($realEstates));
 	}
+	
+	/*
+     * Author: VinhBSD
+     * Summary: get detail of specific real estates
+     * Return: 
+     */
+    function GetDetail() {
+		$realEstateId = $this->input->get('id');
+		
+		$this->load->model('realEstate_Model');
+		$realEstate = $this->realEstate_Model->FindById($realEstateId);
+		$this->output->set_output(json_encode($realEstate));
+	}
 }
 
 ?>

@@ -164,14 +164,23 @@ class RealEstate_Model extends CI_Model{
     }
     
     /*
-     * Author:
-     * Summary: 
-     * Parameter 1:
-     * Parameter 2:
-     * Return:
+     * Author: VinhBSD
+     * Summary: get detail of a real estate 
+     * Parameter 1: id of real estate object
+     * Return: real estate object if exists, null if not
      */
     function FindByID($realEstateID){
-        
+        $sQuery = 'SELECT r.*,c.name as category 
+        		   FROM realestate r 
+        		   JOIN category c ON r.categoryid = c.categoryid 
+        		   WHERE status = ? AND realestateid = ?';
+		$query = $this->db->query($sQuery,array(ACCEPT,$realEstateID));
+		
+		if ($query->num_rows() > 0) {
+			return $query->row_array();
+		} else {
+			return null;
+		}
     }
 	
 	/*
