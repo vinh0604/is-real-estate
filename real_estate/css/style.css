@@ -668,6 +668,9 @@ html, body {
 .table_wrap {
 	clear: both;
 }
+.info_window {
+	max-width: 350px;
+}
 .info_title a{
 	font-weight: bold;
 	text-decoration: none;
