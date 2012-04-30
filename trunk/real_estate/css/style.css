@@ -668,3 +668,12 @@ html, body {
 .table_wrap {
 	clear: both;
 }
+.info_title a{
+	font-weight: bold;
+	text-decoration: none;
+	font-size: 13px;
+}
+.info_price {
+	font-weight: bold;
+	color: red;
+}

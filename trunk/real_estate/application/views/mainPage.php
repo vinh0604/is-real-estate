@@ -11,32 +11,90 @@
 	<link rel="stylesheet" href="<?=base_url()?>css/style.css" type="text/css" media="screen"/>
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="<?=base_url()?>css/lionbars.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="<?=base_url()?>css/context.menu.css" type="text/css" media="screen"/>
 	
 	<script src="<?=base_url()?>js/jquery-1.7.1.min.js" type="text/javascript"></script>
 	<script src="<?=base_url()?>js/GeoJSON.js" type="text/javascript"></script>
 	<script src="<?=base_url()?>js/jquery.mousewheel.min.js" type="text/javascript"></script>
 	<script src="<?=base_url()?>js/jquery.lionbars.0.3.min.js" type="text/javascript"></script>
+	<script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDS5bb-pXbt4N27kkA9y1AS0nGxgciqTiU&sensor=true&language=vi">
+    </script>
+    <script src="<?=base_url()?>js/context.menu.js" type="text/javascript"></script>
 	<script type="text/javascript" charset="utf-8">
 	var SALE = 'Bán';
 	var LEASE = 'Thuê';
 	var map = null;
 	var aMarker = [];
 	var distance = 1000;
+	var fromMarker = null;
+	var toPosition = null;
+	var menu = null;
+	var infoWindow = null;
+	function formatPrice(price) {
+		var sPrice = '';
+		var num = null
+		if (num = price / 1000000000 | 0) {
+			sPrice += num + ' tỷ ';
+		}
+		price %= 1000000000;
+		if (num = price / 1000000 | 0) {
+			sPrice += num + ' triệu ';
+		}
+		price %= 1000000;
+		if (num = price / 1000 | 0) {
+			sPrice += num + ' nghìn ';
+		}
+		price %= 1000;
+		if (price) {
+			sPrice += price + ' ';
+		}
+		return sPrice;
+	}
+	function addEvent(marker,realestateid) {
+		google.maps.event.addListener(marker, 
+									  'click', 
+									  function(event){
+									  	showInfo(marker,realestateid);
+									  });
+	}
+	function showInfo(marker,realEstateId) {
+		$.getJSON('<?=base_url()?>index.php/home/getdetail',
+				  {id: realEstateId},
+				  function(realEstate) {
+				  	var url = '<?=base_url()?>index.php/realestate/' + realEstate.realestateid;
+				  	var price = '';
+				  	console.log(realEstate.price);
+				  	if (parseFloat(realEstate.price)) {
+				  		price = '<span class="info_price">' + formatPrice(realEstate.price) + realEstate.currency + '</span>';
+					  	if (realEstate.unit) {
+					  		price += ' / ' + realEstate.unit;
+					  	}
+				  	}
+				  	infoWindow.setContent('<div class="info_title"><a href="'+ url +'">' + realEstate.title + '</a></div>' + 
+				  						  '<div><b>Địa chỉ: </b>' + realEstate.address + '</div>' + 
+				  						  '<div><b>Diện tích: </b>' + realEstate.area + ' m2' + '</div>' + 
+				  						  '<div><b>Loại BĐS: </b>' + realEstate.category + '</div>' + 
+				  						  '<div><b>Giá: </b> ' + price + '</div>' + 
+				  						  '<div><b>Điện thoại: </b>' + realEstate.contacttel + '</div>');
+				  	infoWindow.open(map,marker);
+				  });
+	}
 	function success(position) {
 		var myLatlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 		map.setCenter(myLatlng);
 		$.getJSON('<?=base_url()?>index.php/home/getnear',
 				  {lat: position.coords.latitude, lng: position.coords.longitude, distance: distance},
 				  function(realEstates){
-				  	var marker;
 				  	for(i in realEstates) {
 				  	  	var icon = '<?=base_url()?>images/house_sale.png';
 				  	  	var location = JSON.parse(realEstates[i].location);
 				  	  	if (realEstates[i].transaction == LEASE) {
 				  	  		icon = '<?=base_url()?>images/house_lease.png';
 				  	  	}
-				  	  	marker = new GeoJSON(location, {"icon": icon});
+				  	  	var marker = new GeoJSON(location, {"icon": icon});
 				  	  	marker.setMap(map);
+				  	  	addEvent(marker,realEstates[i].realestateid);
 				  	  	aMarker.push(marker);
 				  	}
 				  });
@@ -54,6 +112,7 @@
 				  	  	}
 				  	  	marker = new GeoJSON(location, {"icon": icon});
 				  	  	marker.setMap(map);
+				  	  	addEvent(marker,realEstates[i].realestateid);
 				  	  	aMarker.push(marker);
 				  	}
 				  });
@@ -66,7 +125,7 @@
 		});
 		$('#news-list-box').lionbars();
 		var myLatlng = new google.maps.LatLng(10.75, 106.67);
-		var myOptions = {zoom: 16,
+		var myOptions = {zoom: 15,
 						 center: myLatlng,
 						 mapTypeId: google.maps.MapTypeId.ROADMAP
 		};
@@ -76,11 +135,36 @@
 		} else{
 			error();
 		}
+		infoWindow = new google.maps.InfoWindow();
+		menu = new contextMenu({map:map});
+		
+		menu.addItem('Tìm đường từ đây', function(map, latLng){
+			if (!fromMarker) {
+				fromMarker = new google.maps.Marker({icon: '<?=base_url()?>images/from_marker.png'});
+				fromMarker.setMap(map);
+			}
+			fromMarker.setPosition(latLng);
+		});
+		
+		menu.addSep();
+		
+		menu.addItem('Phóng to', function(map, latLng){
+			map.setZoom( map.getZoom() + 1);
+			map.panTo( latLng );
+		});
+
+		menu.addItem('Thu nhỏ', function(map, latLng){
+			map.setZoom( map.getZoom() - 1 );
+			map.panTo(latLng);
+		});
+
+		menu.addSep();
+
+		menu.addItem('Chuyển đến', function(map, latLng){
+			map.panTo(latLng);
+		});
 	})
 	</script>
-	<script type="text/javascript"
-      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDS5bb-pXbt4N27kkA9y1AS0nGxgciqTiU&sensor=true&language=vi">
-    </script>
 </head>
 <body>
 	<?=$topBar?>
