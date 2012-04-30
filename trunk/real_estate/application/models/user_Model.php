@@ -18,9 +18,9 @@ class User_Model extends CI_Model {
      * Return: Record of User by ID
      */
 
-    function GetUser($userID) {
-        $query = 'SELECT * FROM "user" WHERE USERID = ?';
-        $result = $this->db->query($query, array($userID))->result();
+    function GetUser($username) {
+        $query = 'SELECT * FROM "user" WHERE username = ?';
+        $result = $this->db->query($query, array($username))->row();
         return $result;
     }
 
@@ -59,7 +59,8 @@ class User_Model extends CI_Model {
 
     function AddNewUser($newUser) {
         $query = $this->db->insert('"user"', $newUser);
-        return $query;
+        $rows = $this->db->count_all_results();
+        return ($rows == 1);
     }
 
     /*
@@ -72,19 +73,23 @@ class User_Model extends CI_Model {
     function DeleteUser($userID) {
         $query = 'DELETE FROM "user" WHERE USERID = ?';
         $result = $this->db->query($query, array($userID));
-        return $result;
+        $rows = $this->db->count_all_results();
+        return $rows;
     }
 
     /*
-     * Author:
-     * Summary: 
-     * Parameter 1:
-     * Parameter 2:
+     * Author: Hiep
+     * Summary: Update User
+     * Parameter 1:array attributes of user
      * Return:
      */
 
-    function UpdateUser() {
-        
+    function UpdateUser($object) {
+        $data = array($object["name"],$object["email"],$object["birthday"],$object["tel"],$object["address"],$object["username"]);
+        $query="UPDATE \"user\" SET name=?,email=?,birthday=?,tel=?,address=? where username=?";
+        $this->db->query($query,$data);
+        $rows = $this->db->count_all_results();
+        return $rows;
     }
 
     /*
@@ -96,9 +101,9 @@ class User_Model extends CI_Model {
      */
 
     function ChangePassword($userID, $password) {
-        $query = "UPDATE USER SET PASSWORD = ? WHERE USERID = ?";
+        $query = "UPDATE \"user\" SET PASSWORD = ? WHERE USERID = ?";
         $result = $this->db->query($query, array($password, $userID));
-        return $result;
+        return $rows = $this->db->count_all_results();
     }
 
     /*
@@ -110,19 +115,21 @@ class User_Model extends CI_Model {
      */
 
     function CheckOldPassword($userID, $oldPassword) {
-        
+        $query = 'select count(*) as unique from "user" where userid=? and password=?';
+        $result = $this->db->query($query, array($userID, $oldPassword))->row()->unique;
+        return $result;
     }
 
     /*
-     * Author:
-     * Summary: 
-     * Parameter 1:
-     * Parameter 2:
-     * Return:
+     * Author: Hiep
+     * Summary: Validate Data format
+     * Parameter 1: Account Object
+     * Return: boolean = true if birthday is suitable
      */
 
-    function ValidateDataFormat() {
-        
+    function ValidateDataFormat($object) {
+        $now = gmdate("d/m/Y", time());
+        return ($now > $object['birthday']);
     }
 
     /*
@@ -138,15 +145,16 @@ class User_Model extends CI_Model {
     }
 
     /*
-     * Author:
-     * Summary: 
-     * Parameter 1:
-     * Parameter 2:
-     * Return:
+     * Author: Hiep
+     * Summary: Check Unique User
+     * Parameter 1: Object
+     * Return: string if username is existed, else return NULL
      */
 
-    function ValidateUnique() {
-        
+    function ValidateUnique($object) {
+        $query = 'select count(*) as unique from "user" where username=? and email=?';
+        $result = $this->db->query($query, array($object["username"], $object["email"]))->row()->unique;
+        return ($result == 0);
     }
 
     /*
