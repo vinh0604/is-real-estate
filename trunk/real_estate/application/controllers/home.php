@@ -21,7 +21,9 @@ class Home extends CI_Controller {
         $data['topBar'] = $this->load->view('topBar',$data,true);
 		
 		$this->load->model('realEstate_Model');
+		$this->load->model('city_Model');
 		$data['realEstates'] = $this->realEstate_Model->GetNewRealEstates();
+		$data['cities'] = $this->city_Model->GetCities();
 		
 		$this->load->view('mainPage',$data);
     }
@@ -52,6 +54,19 @@ class Home extends CI_Controller {
 		$this->load->model('realEstate_Model');
 		$realEstate = $this->realEstate_Model->FindById($realEstateId);
 		$this->output->set_output(json_encode($realEstate));
+	}
+
+	/*
+     * Author: VinhBSD
+     * Summary: get detail of specific real estates
+     * Return: 
+     */
+    function GetDistrict() {
+		$cityId = $this->input->get('id');
+		
+		$this->load->model('district_Model');
+		$districts = $this->district_Model->GetDistrictsByCityID($cityId);
+		$this->output->set_output(json_encode($districts));
 	}
 }
 
