@@ -129,6 +129,18 @@
 			$(this).children('.sub-menu').hide();
 		});
 		$('#news-list-box').lionbars();
+		$('#city').change(function(){
+			$.getJSON('<?=base_url()?>index.php/home/getdistrict',
+					 {id: $('#city').val()},
+					 function(districts) {
+					 	var htmlDistrict = ['<option value="0">Quận/ Huyện</option>'];
+					 	console.log(districts);
+					 	for(i in districts) {
+					 		htmlDistrict.push(''.concat('<option value="',districts[i].districtid,'">',districts[i].name,'</option>'));
+					 	}
+					 	$('#district').html(htmlDistrict.join(''));
+					 });
+		});
 		
 		$('.direction_link').live('click',function() {
 			toPosition = new google.maps.LatLng($(this).attr('lat'),$(this).attr('lng'));
@@ -212,12 +224,15 @@
 						</tr>
 						<tr>
 							<td>
-								<select name="city" id="city">
+								<select name="city" id="city" style="width:250px;">
 									<option value="0">Tỉnh/Thành phố</option>
+									<?php foreach ($cities as $c):?>
+										<option value="<?=$c->cityid?>"><?=$c->name?></option>
+									<?php endforeach;?>
 								</select>
 							</td>
 							<td>
-								<select name="district" id="district">
+								<select name="district" id="district" style="width:160px;">
 									<option value="0">Quận/ Huyện</option>
 								</select>
 							</td>

@@ -1,3 +1,9 @@
+/*
+ * Author: VinhBSD
+ * Summary: format price 
+ * Parameter 1: original price
+ * Return: formatted string
+ */
 function formatPrice(price) {
 	var sPrice = '';
 	var num = null
