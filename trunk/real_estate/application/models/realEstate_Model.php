@@ -234,8 +234,8 @@ class RealEstate_Model extends CI_Model{
 						  6 => 'status');
 		$aParams = array();
 		$aResult = array();
-		$sQuery = 'SELECT realestateid, title, date, transaction, c.name as category, status, u.username, u.userid
-        		   FROM realestate r 
+		$sSelect = 'SELECT realestateid, title, date, transaction, c.name as category, status, u.username, u.userid ';
+		$sQuery = 'FROM realestate r 
         		   JOIN "user" u ON u.userid = r.userid
         		   LEFT JOIN category c ON r.categoryid = c.categoryid 
         		   WHERE 1=1 ';
@@ -249,13 +249,13 @@ class RealEstate_Model extends CI_Model{
 			$sQuery .= 'AND r.userid = ? ';
 			$aParams[] = $this->session->userdata('user_id');
 		}
+		$query = $this->db->query("SELECT count(*) as count ".$sQuery,$aParams);
+		$aResult['iTotalDisplayRecords'] = $query->row()->count;; 
+		
 		if(array_key_exists($iSort,$aColumns)) {
 			$sSortDir = addslashes($sSortDir);
 			$sQuery .= "ORDER BY $aColumns[$iSort] $sSortDir ";
 		}
-		$query = $this->db->query($sQuery,$aParams);
-		$aResult['iTotalDisplayRecords'] = $query->num_rows(); 
-		
 		if($iLimit)	{
 			$sQuery .= 'LIMIT ? ';
 			$aParams[] = $iLimit;
@@ -264,7 +264,7 @@ class RealEstate_Model extends CI_Model{
 			$sQuery .= 'OFFSET ?';
 			$aParams[] = $iOffset;
 		}
-		$query = $this->db->query($sQuery,$aParams);
+		$query = $this->db->query($sSelect.$sQuery,$aParams);
 		$aResult['aaData'] = $query->result_array();
 		
 		$aCountParams = array();
