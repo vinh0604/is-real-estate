@@ -5,6 +5,7 @@
  * and open the template in the editor.
  */
 define("ACCEPT", 'Đã duyệt');
+define("ADDNEW", 'Chưa duyệt');
 
 class RealEstate_Model extends CI_Model{
 
@@ -20,8 +21,17 @@ class RealEstate_Model extends CI_Model{
      * Parameter 2:
      * Return:
      */
-    function AddNewItem($newItem){
-    
+    function AddNewItem($realEstate,$lat,$lng){
+    	$realEstate['status'] = ADDNEW;
+    	$this->db->set($realEstate);
+    	$lat = floatval($lat);
+		$lng = floatval($lng);
+    	if ($lat && $lng) {
+    		$this->db->set('geom',"setsrid(st_makepoint($lng,$lat),4326)",false);
+		}
+		$this->db->set('date',"now()",false);
+		$this->db->insert('realestate');
+		return $this->db->insert_id();
     }
     
     /*
@@ -31,7 +41,7 @@ class RealEstate_Model extends CI_Model{
      * Parameter 2:
      * Return:
      */
-    function UpdateItem($item){
+    function UpdateItem($item,$lat,$lng){
     
     }
     

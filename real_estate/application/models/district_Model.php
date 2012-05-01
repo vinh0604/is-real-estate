@@ -24,6 +24,20 @@ class District_Model extends CI_Model {
         $result = $this->db->query($query, array($cityID))->result();
         return $result;
     }
+	
+	/*
+     * Author: VinhBSD
+     * Summary: Get name of district by id
+     * Return: Name of district
+     */
+	function GetNameByID($districtid) {
+		$sQuery = 'SELECT name FROM district WHERE districtid = ?';
+		$query = $this->db->query($sQuery,array($districtid));
+		if ($query->num_rows() > 0) {
+			return $query->row()->name;
+		}
+		return null;
+	}
 
 }
 
