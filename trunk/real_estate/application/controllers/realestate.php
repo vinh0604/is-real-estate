@@ -68,7 +68,19 @@ class Realestate extends CI_Controller {
      */
 
     function AddNewItem() {
-        
+        $data['userdata'] = $this->session->userdata;
+        $data['topBar'] = $this->load->view('topBar',$data,true);
+		
+		$this->load->model('city_Model');
+		$data['cities'] = $this->city_Model->GetCities();
+		
+		$this->load->model('category_Model');
+		$data['categories'] = $this->category_Model->GetCategories();
+		
+		$this->load->model('user_Model');
+		$data['user'] = $this->user_Model->FindByID($this->session->userdata('user_id'));
+		
+		$this->load->view('createRealEstatePage',$data);
     }
 
     /*
@@ -84,15 +96,18 @@ class Realestate extends CI_Controller {
     }
 
     /*
-     * Author:
-     * Summary: 
-     * Parameter 1:
-     * Parameter 2:
+     * Author: VinhBSD
+     * Summary: delete real estates
      * Return:
      */
 
     function DeleteItem() {
-        
+        $aRealEstateIds = $this->input->post('a_id');
+		
+		$this->load->model('realEstate_Model');
+		$this->realEstate_Model->DeleteItem($aRealEstateIds);
+		
+		redirect(base_url('index.php/realestate/manage'));
     }
 
     /*
