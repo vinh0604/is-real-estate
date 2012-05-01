@@ -14,7 +14,7 @@
 			<a href="">Quản lý</a>
 			<ul class="sub-menu">
 				<li><a href="<?=base_url()?>index.php/user">Quản lý tài khoản</a></li>
-				<li><a href="<?=base_url()?>index.php/realestate">Quản lý tin</a></li>
+				<li><a href="<?=base_url()?>index.php/realestate/manage">Quản lý tin</a></li>
 			</ul>
 		</li>
 	</ul>
