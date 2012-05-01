@@ -92,6 +92,15 @@
 			resizable: false,
 			draggable: false
 		});
+		<?php if($this->session->flashdata('notice')):?>
+		$('#success_view').dialog({ buttons:[
+			    {text: "Đóng",click: function() { $(this).dialog("close"); } }
+			],
+			modal: true,
+			resizable: false,
+			draggable: false
+		});
+		<?php endif;?>
 		
 		$('#del_btn').click(function() {
 			var not_checked = true;
@@ -117,6 +126,9 @@
 	</div>
 	<div id="notice_view" title="Quản lý tin BĐS" style="display: none;">
 		<p>Không có tin nào được chọn!</p>
+	</div>
+	<div id="success_view" title="Quản lý tin BĐS" style="display: none;">
+		<p><?=$this->session->flashdata('notice')?></p>
 	</div>
 	<?=$topBar?>
 	<div class="container">

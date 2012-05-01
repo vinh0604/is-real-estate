@@ -22,7 +22,20 @@ class City_Model extends CI_Model {
         $result = $this->db->query($query)->result();
         return $result;
     }
-
+	
+	/*
+     * Author: VinhBSD
+     * Summary: Get name of city by id
+     * Return: Name of city
+     */
+	function GetNameByID($cityid) {
+		$sQuery = 'SELECT name FROM city WHERE cityid = ?';
+		$query = $this->db->query($sQuery,array($cityid));
+		if ($query->num_rows() > 0) {
+			return $query->row()->name;
+		}
+		return null;
+	}
 }
 
 ?>

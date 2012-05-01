@@ -17,7 +17,7 @@
 	
 	<script src="<?=base_url()?>js/jquery-1.7.1.min.js" type="text/javascript"></script>
 	<script type="text/javascript" charset="utf-8">
-	var SUB_DIR = '2' + '/';
+	var SUB_DIR = '<?=$realEstateId?>' + '/';
 	$(document).ready(function(){
 		$('.dropdown').hover(function() {
 			$(this).children('.sub-menu').slideDown(200);
@@ -46,9 +46,9 @@
 			<div class="breadcrumbs">
 				<ul>
 					<li class="crumb-first"><a href="<?=base_url()?>index.php"><img src="images/home.png" alt="Trang chủ" width="21"/></a></li>
-					<li class="crumb-sub"><a href="<?=base_url()?>index.php/realestate">Quản lý tin BĐS</a></li>
-					<li class="crumb-sub"><a href="<?=base_url()?>index.php/realestate">Tạo tin BĐS</a></li>
-					<li class="crumb-last"><a href="<?=base_url()?>index.php/realestate">Thêm hình ảnh BĐS</a></li>
+					<li class="crumb-sub"><a href="<?=base_url()?>index.php/realestate/manage">Quản lý tin BĐS</a></li>
+					<li class="crumb-sub"><a href="<?=base_url()?>index.php/realestate/addnewitem">Tạo tin BĐS</a></li>
+					<li class="crumb-last"><a href="#">Thêm hình ảnh BĐS</a></li>
 				</ul>
 			</div>
 			<div class="form_title">Hình ảnh BĐS</div>
@@ -177,7 +177,7 @@
 			{% } %}
 			</script>
 			</div>
-			<div class="form_title"><button class="submit_btn">Hoàn tất</button></div>
+			<div class="form_title"><button class="submit_btn" onclick="window.location = '<?=base_url()?>index.php/realestate/manage'">Hoàn tất</button></div>
 		</div>
 	</div>
 </body>

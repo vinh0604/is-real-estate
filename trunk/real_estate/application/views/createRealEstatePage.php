@@ -23,7 +23,7 @@
 			$(this).children('.sub-menu').hide();
 		});
 		$('#city').change(function(){
-			$.getJSON('<?=base_url()?>index.php/home/getdistrict',
+			$.getJSON('<?=base_url()?>index.php/realestate/getdistrictbycityid',
 					 {id: $('#city').val()},
 					 function(districts) {
 					 	var htmlDistrict = ['<option value="">Quận/ Huyện</option>'];
@@ -49,12 +49,13 @@
 				<ul>
 					<li class="crumb-first"><a href="<?=base_url()?>index.php"><img src="<?=base_url()?>images/home.png" alt="Trang chủ" width="21"/></a></li>
 					<li class="crumb-sub"><a href="<?=base_url()?>index.php/realestate/manage">Quản lý tin BĐS</a></li>
-					<li class="crumb-last"><a href="#">Tạo tin BĐS</a></li>
+					<li class="crumb-last"><a href="<?=base_url()?>index.php/realestate/addnewitem#">Tạo tin BĐS</a></li>
 				</ul>
 			</div>
 			<div class="form_title">Thông tin BĐS</div>
+			<?=validation_errors('<div class="error" style="width: 450px;margin: 4px auto;">','</div>');?>
 			<div class="form_wrapper span-18">
-				<form action="<?=base_url()?>index.php/realestate" method="post" id="re_frm">
+				<form action="<?=base_url()?>index.php/realestate/create" method="post" id="re_frm">
 				<table>
 					<tr>
 						<td colspan="3" style="text-align: center">
@@ -75,9 +76,9 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="label_wrapper"><label for="re_type">Loại BĐS (*):</label></td>
+						<td class="label_wrapper"><label for="category">Loại BĐS (*):</label></td>
 						<td colspan="2">
-							<select name="re_type" id="re_type" class="validate[required]">
+							<select name="category" id="category" class="validate[required]">
 								<option value="">Chọn loại BĐS</option>
 								<?php foreach($categories as $c):?>
 								<option value="<?=$c->categoryid?>"><?=$c->name?></option>	
@@ -156,9 +157,10 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="label_wrapper"><label for="alley">Đường hẻm:</label></td>
+						<td class="label_wrapper"><label for="alley">Độ rộng lối vào:</label></td>
 						<td colspan="2">
-							<input type="text" name="alley" id="alley"/>
+							<input type="text" name="alley" id="alley" class="validate[optional,custom[number]]" style="width: 142px;"/>
+							<b>mét</b>
 						</td>
 					</tr>
 					<tr>
@@ -186,24 +188,24 @@
 					</tr>
 				</table>
 				<input type="hidden" name="lat" id="lat"/>
-				<input type="hidden" name="lat" id="lng"/>
+				<input type="hidden" name="lng" id="lng"/>
 				<div class="section_header">Thông tin liên hệ</div>
 				<table>
 					<tr>
-						<td class="label_wrapper"><label for="c_person">Người liên hệ (*):</label></td>
-						<td colspan="2"><input type="text" name="c_person" id="c_person" class="validate[required]" value="<?=$user? $user->name : ''?>"/></td>
+						<td class="label_wrapper"><label for="contactname">Người liên hệ (*):</label></td>
+						<td colspan="2"><input type="text" name="contactname" id="contactname" class="validate[required]" value="<?=$user? $user->name : ''?>"/></td>
 					</tr>
 					<tr>
-						<td class="label_wrapper"><label for="c_phone">Số điện thoại (*):</label></td>
-						<td colspan="2"><input type="text" name="c_phone" id="c_phone" class="validate[required,custom[onlyNumber]]" value="<?=$user? $user->tel : ''?>"/></td>
+						<td class="label_wrapper"><label for="contacttel">Số điện thoại (*):</label></td>
+						<td colspan="2"><input type="text" name="contacttel" id="contacttel" class="validate[required,custom[onlyNumber]]" value="<?=$user? $user->tel : ''?>"/></td>
 					</tr>
 					<tr>
-						<td class="label_wrapper"><label for="c_address">Địa chỉ (*):</label></td>
-						<td colspan="2"><input type="text" name="c_address" id="c_address" class="validate[required]" value="<?=$user? $user->address : ''?>"/></td>
+						<td class="label_wrapper"><label for="contactadd">Địa chỉ (*):</label></td>
+						<td colspan="2"><input type="text" name="contactadd" id="contactadd" class="validate[required]" value="<?=$user? $user->address : ''?>"/></td>
 					</tr>
 					<tr>
-						<td class="label_wrapper"><label for="c_note">Ghi chú:</label></td>
-						<td colspan="2"><textarea name="c_note" id="c_note"></textarea></td>
+						<td class="label_wrapper"><label for="remark">Ghi chú:</label></td>
+						<td colspan="2"><textarea name="remark" id="remark"></textarea></td>
 					</tr>
 					<tr>
 						<td colspan="3" style="text-align: center;"><input type="submit" value="Tạo tin" class="submit_btn"/></td>
