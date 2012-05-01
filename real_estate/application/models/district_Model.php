@@ -28,6 +28,7 @@ class District_Model extends CI_Model {
 	/*
      * Author: VinhBSD
      * Summary: Get name of district by id
+	 * Parameter 1: ID of district
      * Return: Name of district
      */
 	function GetNameByID($districtid) {
@@ -38,7 +39,6 @@ class District_Model extends CI_Model {
 		}
 		return null;
 	}
-
 }
 
 ?>

@@ -680,3 +680,6 @@ html, body {
 	font-weight: bold;
 	color: red;
 }
+a.submit_btn {
+	color: #fff;
+}

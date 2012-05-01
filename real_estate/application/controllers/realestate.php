@@ -62,10 +62,8 @@ class Realestate extends CI_Controller {
     }
 
     /*
-     * Author:
-     * Summary: 
-     * Parameter 1:
-     * Parameter 2:
+     * Author: VinhBSD
+     * Summary: load new real estate form
      * Return:
      */
 
@@ -237,9 +235,12 @@ class Realestate extends CI_Controller {
 		
 		// append district name to address
 		$this->load->model('district_Model');
-		$district = $this->district_Model->GetNameByID($this->input->post('district'));
-		if ($district) {
-			$realEstate['address'] .= ', '.$district;
+		if($this->input->post('district')){
+			$district = $this->district_Model->GetNameByID($this->input->post('district'));
+			$realEstate['districtid'] = $this->input->post('district');
+			if ($district) {
+				$realEstate['address'] .= ', '.$district;
+			}
 		}
 		// append city name to address
 		$this->load->model('city_Model');
@@ -248,7 +249,6 @@ class Realestate extends CI_Controller {
 			$realEstate['address'] .= ', '.$city;
 		}
 		
-		$realEstate['districtid'] = $this->input->post('district');
 		$realEstate['currency'] = $this->input->post('currency');
 		if($realEstate['currency'] == 'VND') {
 			$realEstate['price'] = floatval($this->input->post('price')) * 1000000;
@@ -285,11 +285,75 @@ class Realestate extends CI_Controller {
 		
 		$data['userdata'] = $this->session->userdata;
         $data['topBar'] = $this->load->view('topBar',$data,true);
-		
-		$this->session->set_flashdata('notice', 'Thao tác tạo tin thực hiện thành công!');
-		$this->session->keep_flashdata('notice');
+
 		$data['topBar'] = $this->load->view('addImagePage',$data);
 	}
+
+	/*
+     * Author: VinhBSD
+     * Summary: complete adding new real estate
+     * Return:
+     */
+    
+    function Complete() {
+    	$this->session->set_flashdata('notice', 'Thao tác tạo tin thực hiện thành công!');
+		redirect(base_url('index.php/realestate/manage'));
+    }
+	
+	/*
+     * Author: VinhBSD
+     * Summary: load edit real estate form
+     * Return:
+     */
+    
+    function Edit($realEstateId) {
+    	$data['userdata'] = $this->session->userdata;
+        $data['topBar'] = $this->load->view('topBar',$data,true);
+		
+		$this->load->model('city_Model');
+		$data['cities'] = $this->city_Model->GetCities();
+		
+		$this->load->model('category_Model');
+		$data['categories'] = $this->category_Model->GetCategories();
+		
+		$this->load->model('realEstate_Model');
+		if ($data['realEstate'] = $this->realEstate_Model->FindByIDForEdit($realEstateId)) {
+			if ($data['realEstate']['currency'] == 'VND') {
+				$data['realEstate']['price'] /= 1000000;
+			}
+			$data['realEstate']['width'] = '';
+			$data['realEstate']['length'] = '';
+			if ($data['realEstate']['size']) {
+				$size = explode(' x ', $data['realEstate']['size']);
+				if (array_key_exists(0, $size)) {
+					$data['realEstate']['width'] = str_replace('m', '', $size[0]);
+				} 
+				if (array_key_exists(1, $size)) {
+					$data['realEstate']['length'] = str_replace('m', '', $size[1]);;
+				}
+			}
+			$data['districts'] = array();
+			if ($data['realEstate']['cityid']) {
+				$this->load->model('district_Model');
+				$data['districts'] = $this->district_Model->GetDistrictsByCityID($data['realEstate']['cityid']);
+			}
+			$data['realEstate']['lat'] = '';
+			$data['realEstate']['lng'] = '';
+			if ($data['realEstate']['position']) {
+				$position = substr($data['realEstate']['position'], strpos($data['realEstate']['position'], '('));
+				$position = preg_replace('/[\(|\)]/', '', $position);
+				$position = explode(' ', $position);
+				if(count($position) > 1) {
+					$data['realEstate']['lat'] = $position[1];
+					$data['realEstate']['lng'] = $position[0];
+				}
+			}
+			$this->load->view('editRealEstatePage',$data);
+		} else {
+			show_error("Không tìm thấy tin bất động sản yêu cầu!");
+		}
+		
+    }
 }
 
 ?>
