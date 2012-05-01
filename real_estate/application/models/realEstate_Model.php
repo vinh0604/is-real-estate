@@ -36,14 +36,14 @@ class RealEstate_Model extends CI_Model{
     }
     
     /*
-     * Author:
-     * Summary: 
-     * Parameter 1:
-     * Parameter 2:
+     * Author: VinhBSD
+     * Summary: delete real estates
+     * Parameter 1: array of real estate IDs 
      * Return:
      */
-    function DeleteItem($realEstateID){
-        
+    function DeleteItem($aRealEstateIDs){
+        $this->db->where_in('realestateid', $aRealEstateIDs);
+		return $this->db->delete(array('photo','realestate'));
     }
     
     /*
@@ -242,7 +242,7 @@ class RealEstate_Model extends CI_Model{
 		if($sFilter) {
 			$sQuery .= 'AND (title LIKE ? OR transaction LIKE ? OR c.name LIKE ? OR u.username LIKE ? OR status LIKE ?) ';
 			for ($i = 0; $i < 5; ++$i ) {
-				$aParams[] = $sFilter;
+				$aParams[] = '%'.$sFilter.'%';
 			}
 		}		   
 		if (!$this->session->userdata('is_admin')) {

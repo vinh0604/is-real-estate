@@ -22,10 +22,22 @@
 		}, function() {
 			$(this).children('.sub-menu').hide();
 		});
-		$('#news_frm').validationEngine('attach');
+		$('#city').change(function(){
+			$.getJSON('<?=base_url()?>index.php/home/getdistrict',
+					 {id: $('#city').val()},
+					 function(districts) {
+					 	var htmlDistrict = ['<option value="">Quận/ Huyện</option>'];
+					 	console.log(districts);
+					 	for(i in districts) {
+					 		htmlDistrict.push(''.concat('<option value="',districts[i].districtid,'">',districts[i].name,'</option>'));
+					 	}
+					 	$('#district').html(htmlDistrict.join(''));
+					 });
+		});
+		$('#re_frm').validationEngine('attach');
 		$('#map_marker').click(function(){
 			window.open ("<?=base_url()?>public/mapMarkerPage.html","mymap",'width=840,height=600,toolbar=0,resizable=0');
-		})
+		});
 	})
 	</script>
 </head>
@@ -36,13 +48,13 @@
 			<div class="breadcrumbs">
 				<ul>
 					<li class="crumb-first"><a href="<?=base_url()?>index.php"><img src="<?=base_url()?>images/home.png" alt="Trang chủ" width="21"/></a></li>
-					<li class="crumb-sub"><a href="<?=base_url()?>index.php/realestate">Quản lý tin BĐS</a></li>
-					<li class="crumb-last"><a href="<?=base_url()?>index.php/realestate">Tạo tin BĐS</a></li>
+					<li class="crumb-sub"><a href="<?=base_url()?>index.php/realestate/manage">Quản lý tin BĐS</a></li>
+					<li class="crumb-last"><a href="#">Tạo tin BĐS</a></li>
 				</ul>
 			</div>
 			<div class="form_title">Thông tin BĐS</div>
 			<div class="form_wrapper span-18">
-				<form action="<?=base_url()?>index.php/realestate" method="post" id="news_frm">
+				<form action="<?=base_url()?>index.php/realestate" method="post" id="re_frm">
 				<table>
 					<tr>
 						<td colspan="3" style="text-align: center">
@@ -56,9 +68,9 @@
 					<tr>
 						<td class="label_wrapper"><label>Loại giao dịch (*):</label></td>
 						<td colspan="2">
-							<input type="radio" name="transaction" id="transaction_0" value="0" checked class="validate[required]"/>
+							<input type="radio" name="transaction" id="transaction_0" value="Bán" checked class="validate[required]"/>
 							<label for="transaction_0">Bán</label>
-							<input type="radio" name="transaction" id="transaction_1" value="1" class="validate[required]"/>
+							<input type="radio" name="transaction" id="transaction_1" value="Thuê" class="validate[required]"/>
 							<label for="transaction_1">Cho thuê</label>
 						</td>
 					</tr>
@@ -67,6 +79,9 @@
 						<td colspan="2">
 							<select name="re_type" id="re_type" class="validate[required]">
 								<option value="">Chọn loại BĐS</option>
+								<?php foreach($categories as $c):?>
+								<option value="<?=$c->categoryid?>"><?=$c->name?></option>	
+								<?php endforeach;?>
 							</select>
 						</td>
 					</tr>
@@ -77,21 +92,29 @@
 					<tr>
 						<td class="label_wrapper"></td>
 						<td style="width: 169px;">
-							<select name="district" id="district" class="validate[required]">
-								<option value="">Quận / Huyện</option>
+							<select name="city" id="city" class="validate[required]">
+								<option value="">Tỉnh / Thành phố</option>
+								<?php foreach($cities as $c):?>
+								<option value="<?=$c->cityid?>"><?=$c->name?></option>	
+								<?php endforeach;?>
 							</select>
 						</td>
 						<td>
-							<select name="city" id="city" class="validate[required]">
-								<option value="">Tỉnh / Thành phố</option>
+							<select name="district" id="district">
+								<option value="">Quận / Huyện</option>
 							</select>
 						</td>
 					</tr>
 					<tr>
 						<td class="label_wrapper"><label for="price">Giá (*):</label></td>
 						<td style="width: 169px;">
-							<input type="text" name="price" id="price" style="width: 110px;" class="validate[required,custom[number]]"/>
-							<b>triệu VNĐ</b>
+							<input type="text" name="price" id="price" style="width: 78px;" class="validate[required,custom[number]]"/>
+							<select name="currency" id="district" style="width: 85px;">
+								<option value="VND">triệu VNĐ</option>
+								<option value="USD">USD</option>
+								<option value="lượng">lượng</option>
+								<option value="lượng">chỉ</option>
+							</select>
 						</td>
 						<td>
 							<label for="unit">Đơn vị tính (*):</label>
@@ -121,6 +144,14 @@
 						<td colspan="2">
 							<select name="direction" id="direction">
 								<option value="">Chọn hướng nhà</option>
+								<option value="Đông">Đông</option>
+								<option value="Tây">Tây</option>
+								<option value="Nam">Nam</option>
+								<option value="Bắc">Bắc</option>
+								<option value="Đông Bắc">Đông Bắc</option>
+								<option value="Tây Nam">Tây Nam</option>
+								<option value="Đông Nam">Đông Nam</option>
+								<option value="Tây Bắc">Tây Bắc</option>
 							</select>
 						</td>
 					</tr>
@@ -131,10 +162,13 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="label_wrapper"><label for="legal_status">Tình trạng pháp lý (*):</label></td>
+						<td class="label_wrapper"><label for="legal_status">Tình trạng pháp lý:</label></td>
 						<td colspan="2">
-							<select name="legal_status" id="legal_status" class="validate[required]">
+							<select name="legal_status" id="legal_status">
 								<option value="">Chọn Tình trạng pháp lý</option>
+								<option value="Sổ đỏ">Sổ đỏ</option>
+								<option value="Sổ hồng">Sổ hồng</option>
+								<option value="Giấy tờ hợp lệ">Giấy tờ hợp lệ</option>
 							</select>
 						</td>
 					</tr>
@@ -157,15 +191,15 @@
 				<table>
 					<tr>
 						<td class="label_wrapper"><label for="c_person">Người liên hệ (*):</label></td>
-						<td colspan="2"><input type="text" name="c_person" id="c_person" class="validate[required]"/></td>
+						<td colspan="2"><input type="text" name="c_person" id="c_person" class="validate[required]" value="<?=$user? $user->name : ''?>"/></td>
 					</tr>
 					<tr>
 						<td class="label_wrapper"><label for="c_phone">Số điện thoại (*):</label></td>
-						<td colspan="2"><input type="text" name="c_phone" id="c_phone" class="validate[required,custom[onlyNumber]]"/></td>
+						<td colspan="2"><input type="text" name="c_phone" id="c_phone" class="validate[required,custom[onlyNumber]]" value="<?=$user? $user->tel : ''?>"/></td>
 					</tr>
 					<tr>
 						<td class="label_wrapper"><label for="c_address">Địa chỉ (*):</label></td>
-						<td colspan="2"><input type="text" name="c_address" id="c_address" class="validate[required]"/></td>
+						<td colspan="2"><input type="text" name="c_address" id="c_address" class="validate[required]" value="<?=$user? $user->address : ''?>"/></td>
 					</tr>
 					<tr>
 						<td class="label_wrapper"><label for="c_note">Ghi chú:</label></td>

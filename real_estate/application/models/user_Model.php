@@ -158,15 +158,20 @@ class User_Model extends CI_Model {
     }
 
     /*
-     * Author:
-     * Summary: 
-     * Parameter 1:
-     * Parameter 2:
-     * Return:
+     * Author: VinhBSD
+     * Summary: get user by user id
+     * Parameter 1: user id
+     * Return: user object if user exists, else return NULL
      */
 
-    function FindByID() {
-        
+    function FindByID($userid) {
+        $sQuery = 'SELECT * FROM "user" WHERE userid = ?';
+		$query = $this->db->query($sQuery, array($userid));
+		if ($query->num_rows() > 0) {
+			$result = $query->row();
+        	return $result;
+		}
+        return null;
     }
 
 }

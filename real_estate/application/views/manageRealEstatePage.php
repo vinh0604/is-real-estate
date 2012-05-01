@@ -72,8 +72,11 @@
 		}).live('mouseleave', function(){
 			$(this).children('img').attr('src','<?=base_url()?>images/edit.png');
 		});
+		$('#add_btn').click(function() {
+			window.location = '<?=base_url()?>index.php/realestate/addnewitem';
+		});
 		$('#confirm_view').dialog({ buttons:[
-			    {text: "Có",click: function() { } },
+			    {text: "Có",click: function() { $('#re_frm').submit(); } },
 			    {text: "Không",click: function() { $(this).dialog("close"); } }
 			],
 			autoOpen: false,
@@ -130,7 +133,7 @@
 					<button class="add_btn" id="add_btn"><img src="<?=base_url()?>images/plus.png" />Viết tin mới</button>
 				</div>
 				<div class="table_wrap">
-					<form action="<?=base_url()?>index.php/realestate/delete" method="post" id="re_frm">
+					<form action="<?=base_url()?>index.php/realestate/deleteitem" method="post" id="re_frm">
 					<table border="0" cellspacing="0" cellpadding="0" id="account_table" class="display">
 						<thead>
 							<tr>
