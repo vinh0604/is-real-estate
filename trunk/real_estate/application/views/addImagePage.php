@@ -45,7 +45,7 @@
 		<div class="main-content span-24">
 			<div class="breadcrumbs">
 				<ul>
-					<li class="crumb-first"><a href="<?=base_url()?>index.php"><img src="images/home.png" alt="Trang chủ" width="21"/></a></li>
+					<li class="crumb-first"><a href="<?=base_url()?>index.php"><img src="<?=base_url()?>images/home.png" alt="Trang chủ" width="21"/></a></li>
 					<li class="crumb-sub"><a href="<?=base_url()?>index.php/realestate/manage">Quản lý tin BĐS</a></li>
 					<li class="crumb-sub"><a href="<?=base_url()?>index.php/realestate/addnewitem">Tạo tin BĐS</a></li>
 					<li class="crumb-last"><a href="#">Thêm hình ảnh BĐS</a></li>
@@ -177,7 +177,7 @@
 			{% } %}
 			</script>
 			</div>
-			<div class="form_title"><button class="submit_btn" onclick="window.location = '<?=base_url()?>index.php/realestate/manage'">Hoàn tất</button></div>
+			<div class="form_title"><a class="submit_btn" href="<?=base_url()?>index.php/realestate/complete">Hoàn tất</a></div>
 		</div>
 	</div>
 </body>

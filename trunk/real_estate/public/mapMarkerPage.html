@@ -78,13 +78,21 @@
                 showAddress();
 			});
 			marker.setMap(map);
-			document.getElementById("txtLat").value=marker.getPosition().lat();
-            document.getElementById("txtLng").value=marker.getPosition().lng(); 
-			showAddress();
-        	if (navigator.geolocation) {
-			  	navigator.geolocation.getCurrentPosition(success, error);
+			if (window.opener.document.getElementById("lat").value && window.opener.document.getElementById("lng").value) {
+				document.getElementById("txtLat").value=window.opener.document.getElementById("lat").value;
+            	document.getElementById("txtLng").value=window.opener.document.getElementById("lng").value; 
+            	myLatlng = new google.maps.LatLng(window.opener.document.getElementById("lat").value,window.opener.document.getElementById("lng").value);
+            	marker.setPosition(myLatlng);
+            	showAddress();
 			} else {
-				error();
+				document.getElementById("txtLat").value=marker.getPosition().lat();
+	            document.getElementById("txtLng").value=marker.getPosition().lng(); 
+				showAddress();
+	        	if (navigator.geolocation) {
+				  	navigator.geolocation.getCurrentPosition(success, error);
+				} else {
+					error();
+				}
 			}
         }
         

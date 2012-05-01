@@ -19,17 +19,36 @@
 	<script src="<?=base_url()?>js/jquery.validationEngine.js" type="text/javascript"></script>
 	<script src="<?=base_url()?>js/jquery.validationEngine-vi.js" type="text/javascript"></script>
 	<script type="text/javascript" charset="utf-8">
-	var SUB_DIR = '2' + '/';
+	var SUB_DIR = '<?=$realEstate['realestateid']?>' + '/';
 	$(document).ready(function(){
 		$('.dropdown').hover(function() {
 			$(this).children('.sub-menu').slideDown(200);
 		}, function() {
 			$(this).children('.sub-menu').hide();
 		});
-		$('#news_frm').validationEngine('attach');
+		$('#city').change(function(){
+			$.getJSON('<?=base_url()?>index.php/realestate/getdistrictbycityid',
+					 {id: $('#city').val()},
+					 function(districts) {
+					 	var htmlDistrict = ['<option value="">Quận/ Huyện</option>'];
+					 	console.log(districts);
+					 	for(i in districts) {
+					 		htmlDistrict.push(''.concat('<option value="',districts[i].districtid,'">',districts[i].name,'</option>'));
+					 	}
+					 	$('#district').html(htmlDistrict.join(''));
+					 });
+		});
+		$('#re_frm').validationEngine('attach');
 		$('#map_marker').click(function(){
 			window.open ("<?=base_url()?>public/mapMarkerPage.html","mymap",'width=840,height=600,toolbar=0,resizable=0');
-		})
+		});
+		$('#city').val('<?=$realEstate['cityid']?>');
+		$('#district').val('<?=$realEstate['districtid']?>');
+		$('[name="transaction"][value="<?=$realEstate['transaction']?>"]').attr('checked', 'checked');
+		$('#category').val('<?=$realEstate['categoryid']?>');
+		$('#currency').val('<?=$realEstate['currency']?>');
+		$('#direction').val('<?=$realEstate['direction']?>');
+		$('#legalstatus').val('<?=$realEstate['legalstatus']?>');
 	})
 	</script>
 	<script src="<?=base_url()?>js/jquery.ui.widget.js" type="text/javascript"></script>
@@ -51,14 +70,16 @@
 		<div class="main-content span-24">
 			<div class="breadcrumbs">
 				<ul>
-					<li class="crumb-first"><a href="#"><img src="<?=base_url()?>images/home.png" alt="Trang chủ" width="21"/></a></li>
-					<li class="crumb-sub"><a href="#">Quản lý tin BĐS</a></li>
+					<li class="crumb-first"><a href="<?=base_url()?>index.php"><img src="<?=base_url()?>images/home.png" alt="Trang chủ" width="21"/></a></li>
+					<li class="crumb-sub"><a href="<?=base_url()?>index.php/realestate/manage">Quản lý tin BĐS</a></li>
 					<li class="crumb-last"><a href="#">Sửa tin BĐS</a></li>
 				</ul>
 			</div>
 			<div class="form_title">Thông tin BĐS</div>
+			<?=validation_errors('<div class="error" style="width: 450px;margin: 4px auto;">','</div>');?>
 			<div class="form_wrapper span-18">
-				<form action="#" method="post" id="news_frm">
+				<form action="<?=base_url()?>index.php/realestate/updateitem" method="post" id="re_frm">
+				<input type="hidden" name="realestateid" value="<?=$realEstate['realestateid']?>"/>
 				<table>
 					<tr>
 						<td colspan="3" style="text-align: center">
@@ -67,68 +88,82 @@
 					</tr>
 					<tr>
 						<td class="label_wrapper"><label for="title">Tiêu đề tin (*):</label></td>
-						<td colspan="2"><input type="text" name="title" id="title" placeholder="Nhập tiêu đề..." class="validate[required]"/></td>
+						<td colspan="2"><input type="text" name="title" id="title" placeholder="Nhập tiêu đề..." class="validate[required]" value="<?=$realEstate['title']?>"/></td>
 					</tr>
 					<tr>
 						<td class="label_wrapper"><label>Loại giao dịch (*):</label></td>
 						<td colspan="2">
-							<input type="radio" name="transaction" id="transaction_0" value="0" checked class="validate[required]"/>
+							<input type="radio" name="transaction" id="transaction_0" value="Bán" checked class="validate[required]"/>
 							<label for="transaction_0">Bán</label>
-							<input type="radio" name="transaction" id="transaction_1" value="1" class="validate[required]"/>
+							<input type="radio" name="transaction" id="transaction_1" value="Thuê" class="validate[required]"/>
 							<label for="transaction_1">Cho thuê</label>
 						</td>
 					</tr>
 					<tr>
-						<td class="label_wrapper"><label for="re_type">Loại BĐS (*):</label></td>
+						<td class="label_wrapper"><label for="category">Loại BĐS (*):</label></td>
 						<td colspan="2">
-							<select name="re_type" id="re_type" class="validate[required]">
+							<select name="category" id="category" class="validate[required]">
 								<option value="">Chọn loại BĐS</option>
+								<?php foreach($categories as $c):?>
+								<option value="<?=$c->categoryid?>"><?=$c->name?></option>	
+								<?php endforeach;?>
 							</select>
 						</td>
 					</tr>
 					<tr>
 						<td class="label_wrapper"><label for="address">Địa chỉ (*):</label></td>
-						<td colspan="2"><input type="text" name="address" id="address" placeholder="Nhập số nhà, đường, phường xã..." class="validate[required]"/></td>
+						<td colspan="2"><input type="text" name="address" id="address" placeholder="Nhập số nhà, đường, phường xã..." class="validate[required]" value="<?=$realEstate['address']?>"/></td>
 					</tr>
 					<tr>
 						<td class="label_wrapper"></td>
 						<td style="width: 169px;">
-							<select name="district" id="district" class="validate[required]">
-								<option value="">Quận / Huyện</option>
+							<select name="city" id="city" class="validate[required]">
+								<option value="">Tỉnh / Thành phố</option>
+								<?php foreach($cities as $c):?>
+								<option value="<?=$c->cityid?>"><?=$c->name?></option>	
+								<?php endforeach;?>
 							</select>
 						</td>
 						<td>
-							<select name="city" id="city" class="validate[required]">
-								<option value="">Tỉnh / Thành phố</option>
+							<select name="district" id="district">
+								<option value="">Quận / Huyện</option>
+								<?php foreach($districts as $d):?>
+								<option value="<?=$d->districtid?>"><?=$d->name?></option>	
+								<?php endforeach;?>
 							</select>
 						</td>
 					</tr>
 					<tr>
 						<td class="label_wrapper"><label for="price">Giá (*):</label></td>
 						<td style="width: 169px;">
-							<input type="text" name="price" id="price" style="width: 110px;" class="validate[required,custom[number]]"/>
-							<b>triệu VNĐ</b>
+							<input type="text" name="price" id="price" style="width: 78px;" class="validate[required,custom[number]]" value="<?=$realEstate['price']?>"/>
+							<select name="currency" id="currency" style="width: 85px;">
+								<option value="VND">triệu VNĐ</option>
+								<option value="USD">USD</option>
+								<option value="lượng">lượng</option>
+								<option value="lượng">chỉ</option>
+							</select>
 						</td>
 						<td>
 							<label for="unit">Đơn vị tính (*):</label>
-							<input type="text" name="unit" id="unit" style="width: 71px;"  class="validate[required]"/>
+							<input type="text" name="unit" id="unit" style="width: 71px;"  class="validate[required]" value="<?=$realEstate['unit']?>"/>
 						</td>
 					</tr>
 					<tr>
 						<td class="label_wrapper"><label for="area">Diện tích (*):</label></td>
 						<td colspan="2">
-							<input type="text" name="area" id="area" style="width: 169px;"  class="validate[required,custom[number]]"/>
+							<input type="text" name="area" id="area" style="width: 169px;"  class="validate[required,custom[number]]" value="<?=$realEstate['area']?>"/>
 							<b>mét vuông</b>
 						</td>
 					</tr>
 					<tr>
 						<td class="label_wrapper"><label for="width">Kích thước:</label></td>
 						<td style="width: 169px;">
-							<input type="text" name="width" id="width" style="width: 142px;" placeholder="Nhập chiều rộng..." class="validate[optional,custom[number]]"/>
+							<input type="text" name="width" id="width" style="width: 142px;" placeholder="Nhập chiều rộng..." class="validate[optional,custom[number]]" value="<?=$realEstate['width']?>"/>
 							<b>mét</b>
 						</td>
 						<td>
-							<input type="text" name="length" id="length" style="width: 142px;" placeholder="Nhập chiều dài..." class="validate[optional,custom[number]]"/>
+							<input type="text" name="length" id="length" style="width: 142px;" placeholder="Nhập chiều dài..." class="validate[optional,custom[number]]" value="<?=$realEstate['length']?>"/>
 							<b>mét</b>
 						</td>
 					</tr>
@@ -137,27 +172,40 @@
 						<td colspan="2">
 							<select name="direction" id="direction">
 								<option value="">Chọn hướng nhà</option>
+								<option value="">Chọn hướng nhà</option>
+								<option value="Đông">Đông</option>
+								<option value="Tây">Tây</option>
+								<option value="Nam">Nam</option>
+								<option value="Bắc">Bắc</option>
+								<option value="Đông Bắc">Đông Bắc</option>
+								<option value="Tây Nam">Tây Nam</option>
+								<option value="Đông Nam">Đông Nam</option>
+								<option value="Tây Bắc">Tây Bắc</option>
 							</select>
 						</td>
 					</tr>
 					<tr>
-						<td class="label_wrapper"><label for="alley">Đường hẻm:</label></td>
+						<td class="label_wrapper"><label for="alley">Độ rộng lối vào:</label></td>
 						<td colspan="2">
-							<input type="text" name="alley" id="alley"/>
+							<input type="text" name="alley" id="alley" class="validate[optional,custom[number]]" style="width: 142px;" value="<?=$realEstate['alley']?>"/>
+							<b>mét</b>
 						</td>
 					</tr>
 					<tr>
-						<td class="label_wrapper"><label for="legal_status">Tình trạng pháp lý (*):</label></td>
+						<td class="label_wrapper"><label for="legal_status">Tình trạng pháp lý:</label></td>
 						<td colspan="2">
-							<select name="legal_status" id="legal_status" class="validate[required]">
+							<select name="legalstatus" id="legalstatus">
 								<option value="">Chọn Tình trạng pháp lý</option>
+								<option value="Sổ đỏ">Sổ đỏ</option>
+								<option value="Sổ hồng">Sổ hồng</option>
+								<option value="Giấy tờ hợp lệ">Giấy tờ hợp lệ</option>
 							</select>
 						</td>
 					</tr>
 					<tr>
 						<td class="label_wrapper"><label for="description">Mô tả chi tiết:</label></td>
 						<td colspan="2">
-							<textarea name="description" id="description" placeholder="Thông tin về cơ sở vật chất, tiện nghi, phòng ốc..."/></textarea>
+							<textarea name="description" id="description" placeholder="Thông tin về cơ sở vật chất, tiện nghi, phòng ốc..."/><?=$realEstate['description']?></textarea>
 						</td>
 					</tr>
 					<tr>
@@ -167,25 +215,25 @@
 						</td>
 					</tr>
 				</table>
-				<input type="hidden" name="lat" id="lat"/>
-				<input type="hidden" name="lat" id="lng"/>
+				<input type="hidden" name="lat" id="lat" value="<?=$realEstate['lat']?>"/>
+				<input type="hidden" name="lng" id="lng" value="<?=$realEstate['lng']?>"/>
 				<div class="section_header">Thông tin liên hệ</div>
 				<table>
 					<tr>
-						<td class="label_wrapper"><label for="c_person">Người liên hệ (*):</label></td>
-						<td colspan="2"><input type="text" name="c_person" id="c_person" class="validate[required]"/></td>
+						<td class="label_wrapper"><label for="contactname">Người liên hệ (*):</label></td>
+						<td colspan="2"><input type="text" name="contactname" id="contactname" class="validate[required]" value="<?=$realEstate['contactname']?>"/></td>
 					</tr>
 					<tr>
-						<td class="label_wrapper"><label for="c_phone">Số điện thoại (*):</label></td>
-						<td colspan="2"><input type="text" name="c_phone" id="c_phone" class="validate[required,custom[onlyNumber]]"/></td>
+						<td class="label_wrapper"><label for="contacttel">Số điện thoại (*):</label></td>
+						<td colspan="2"><input type="text" name="contacttel" id="contacttel" class="validate[required,custom[onlyNumber]]" value="<?=$realEstate['contacttel']?>"/></td>
 					</tr>
 					<tr>
-						<td class="label_wrapper"><label for="c_address">Địa chỉ (*):</label></td>
-						<td colspan="2"><input type="text" name="c_address" id="c_address" class="validate[required]"/></td>
+						<td class="label_wrapper"><label for="contactadd">Địa chỉ (*):</label></td>
+						<td colspan="2"><input type="text" name="contactadd" id="contactadd" class="validate[required]" value="<?=$realEstate['contactadd']?>"/></td>
 					</tr>
 					<tr>
-						<td class="label_wrapper"><label for="c_note">Ghi chú:</label></td>
-						<td colspan="2"><textarea name="c_note" id="c_note"></textarea></td>
+						<td class="label_wrapper"><label for="remark">Ghi chú:</label></td>
+						<td colspan="2"><textarea name="remark" id="remark"><?=$realEstate['remark']?></textarea></td>
 					</tr>
 					<tr>
 						<td colspan="3" style="text-align: center;"><input type="submit" value="Lưu thay đổi" class="submit_btn"/></td>

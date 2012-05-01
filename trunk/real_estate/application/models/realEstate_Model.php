@@ -287,5 +287,31 @@ class RealEstate_Model extends CI_Model{
 		
 		return $aResult;
 	}
+
+	/*
+     * Author: VinhBSD
+     * Summary: get detail of a real estate for editing
+     * Parameter 1: id of real estate object
+     * Return: real estate object if exists, null if not
+     */
+    function FindByIDForEdit($realEstateID){
+        $sQuery = 'SELECT r.*,st_astext(r.geom) as position, c.name as category, d.cityid 
+        		   FROM realestate r 
+        		   LEFT JOIN category c ON r.categoryid = c.categoryid 
+        		   LEFT JOIN district d ON r.districtid = d.districtid
+        		   WHERE realestateid = ?';
+		if(!$this->session->userdata('is_admin')) {
+			$sQuery .= ' AND userid = ?';
+			$query = $this->db->query($sQuery,array($realEstateID,$this->session->userdata('user_id')));
+		} else {
+			$query = $this->db->query($sQuery,array($realEstateID));
+		}
+		
+		if ($query->num_rows() > 0) {
+			return $query->row_array();
+		} else {
+			return null;
+		}
+    }
 }
 ?>

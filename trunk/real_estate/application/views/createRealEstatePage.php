@@ -110,7 +110,7 @@
 						<td class="label_wrapper"><label for="price">Giá (*):</label></td>
 						<td style="width: 169px;">
 							<input type="text" name="price" id="price" style="width: 78px;" class="validate[required,custom[number]]"/>
-							<select name="currency" id="district" style="width: 85px;">
+							<select name="currency" id="currency" style="width: 85px;">
 								<option value="VND">triệu VNĐ</option>
 								<option value="USD">USD</option>
 								<option value="lượng">lượng</option>
@@ -166,7 +166,7 @@
 					<tr>
 						<td class="label_wrapper"><label for="legal_status">Tình trạng pháp lý:</label></td>
 						<td colspan="2">
-							<select name="legal_status" id="legal_status">
+							<select name="legalstatus" id="legalstatus">
 								<option value="">Chọn Tình trạng pháp lý</option>
 								<option value="Sổ đỏ">Sổ đỏ</option>
 								<option value="Sổ hồng">Sổ hồng</option>
