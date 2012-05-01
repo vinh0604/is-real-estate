@@ -69,14 +69,19 @@ class RealEstate_Model extends CI_Model{
     }
     
     /*
-     * Author:
-     * Summary: 
-     * Parameter 1:
-     * Parameter 2:
-     * Return:
+     * Author: VinhBSD
+     * Summary: get of real estates
+     * Return: array of real estate objects
      */
     function GetAllRealEstates(){
-        
+        $sQuery = 'SELECT realestateid, title, date, transaction, c.name as category, status, u.username, u.userid
+        		   FROM realestate r 
+        		   JOIN "user" u ON u.userid = r.userid
+        		   LEFT JOIN category c ON r.categoryid = c.categoryid 
+        		   LIMIT ? OFFSET ?';
+		$result = $this->db->query($sQuery,array(10,0))->result_array();
+		
+		return $result;
     }
     
     /*
@@ -172,7 +177,8 @@ class RealEstate_Model extends CI_Model{
     function FindByID($realEstateID){
         $sQuery = 'SELECT r.*,c.name as category 
         		   FROM realestate r 
-        		   JOIN category c ON r.categoryid = c.categoryid 
+        		   JOIN "user" u ON u.userid = r.userid
+        		   LEFT JOIN category c ON r.categoryid = c.categoryid 
         		   WHERE status = ? AND realestateid = ?';
 		$query = $this->db->query($sQuery,array(ACCEPT,$realEstateID));
 		
@@ -200,5 +206,76 @@ class RealEstate_Model extends CI_Model{
 		
 		return $result;
     }
+
+	/*
+     * Author: VinhBSD
+     * Summary: Get all real estates of specific user
+     * Parameter 1: user id
+     * Return: array of real estate objects
+     */
+    function GetAllRealEstatesByUser($userId){
+        $sQuery = 'SELECT realestateid, title, date, transaction, c.name as category, status, u.username, u.userid
+        		   FROM realestate r 
+        		   JOIN "user" u ON u.userid = r.userid
+        		   LEFT JOIN category c ON r.categoryid = c.categoryid 
+        		   WHERE r.userid = ?
+        		   LIMIT ? OFFSET ?';
+		$result = $this->db->query($sQuery,array($userId,10,0))->result_array();
+		
+		return $result;
+    }
+	
+	function GetRealEstateForDataTable($sFilter, $iSort, $sSortDir, $iLimit, $iOffset) {
+		$aColumns = array(1 => 'title', 
+						  2 => 'u.username', 
+						  3 => 'date', 
+						  4 => 'transaction', 
+						  5 => 'category',
+						  6 => 'status');
+		$aParams = array();
+		$aResult = array();
+		$sQuery = 'SELECT realestateid, title, date, transaction, c.name as category, status, u.username, u.userid
+        		   FROM realestate r 
+        		   JOIN "user" u ON u.userid = r.userid
+        		   LEFT JOIN category c ON r.categoryid = c.categoryid 
+        		   WHERE 1=1 ';
+		if($sFilter) {
+			$sQuery .= 'AND (title LIKE ? OR transaction LIKE ? OR c.name LIKE ? OR u.username LIKE ? OR status LIKE ?) ';
+			for ($i = 0; $i < 5; ++$i ) {
+				$aParams[] = $sFilter;
+			}
+		}		   
+		if (!$this->session->userdata('is_admin')) {
+			$sQuery .= 'AND r.userid = ? ';
+			$aParams[] = $this->session->userdata('user_id');
+		}
+		if(array_key_exists($iSort,$aColumns)) {
+			$sSortDir = addslashes($sSortDir);
+			$sQuery .= "ORDER BY $aColumns[$iSort] $sSortDir ";
+		}
+		$query = $this->db->query($sQuery,$aParams);
+		$aResult['iTotalDisplayRecords'] = $query->num_rows(); 
+		
+		if($iLimit)	{
+			$sQuery .= 'LIMIT ? ';
+			$aParams[] = $iLimit;
+		}
+		if($iOffset)	{
+			$sQuery .= 'OFFSET ?';
+			$aParams[] = $iOffset;
+		}
+		$query = $this->db->query($sQuery,$aParams);
+		$aResult['aaData'] = $query->result_array();
+		
+		$aCountParams = array();
+		$sQuery = 'SELECT count(*) as count FROM realestate';
+		if (!$this->session->userdata('is_admin')) {
+			$sQuery .= 'WHERE r.userid = ? ';
+			$aCountParams[] = $this->session->userdata('user_id');
+		}
+		$aResult['iTotalRecords'] = $this->db->query($sQuery,$aCountParams)->row()->count;
+		
+		return $aResult;
+	}
 }
 ?>

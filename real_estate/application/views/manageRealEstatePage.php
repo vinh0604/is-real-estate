@@ -17,22 +17,33 @@
 	<script src="<?=base_url()?>js/jquery-ui-1.8.18.custom.min.js" type="text/javascript"></script>
 	<script src="<?=base_url()?>js/jquery.dataTables.min.js" type="text/javascript"></script>
 	<script type="text/javascript" charset="utf-8">
+	var reTable;
 	$(document).ready(function(){
 		$('.dropdown').hover(function() {
 			$(this).children('.sub-menu').slideDown(200);
 		}, function() {
 			$(this).children('.sub-menu').hide();
 		});
-		$('#account_table').dataTable({
-			"bJQueryUI": true,
-			"aoColumns": [{"bSortable": false,"bSearchable": false,"sWidth" :"40px"},
-						  {"bSortable": false,"bSearchable": false,"sWidth" :"30px"},
-						  null,
-						  null,
-						  null,
-						  null,
-						  {"bSortable": false,"bSearchable": false,"sWidth" :"30px"}]
-		});
+		reTable = $('#account_table').dataTable({
+						"bJQueryUI": true,
+						"aoColumns": [{"mDataProp" : function(row,eType) { return '<input type="checkbox" name="a_id[]" value="' + row.realestateid + '"/>';},"bSortable": false,"bSearchable": false,"sWidth" :"30px"},
+									  {"mDataProp" : "title","sWidth" :"200px"},
+									  {"mDataProp" : function(row,eType) {return '<a href="<?=base_url()?>index.php/user/' + row.userid + '">' + row.username + '</a>';},"bVisible": <?=(array_key_exists('is_admin',$userdata) && $userdata['is_admin']) ? 'true' : 'false'?>},
+									  {"mDataProp" : "date"},
+									  {"mDataProp" : "transaction"},
+									  {"mDataProp" : "category"},
+									  {"mDataProp" : "status"},
+									  {"mDataProp" : function(row,eType) {return '<a href="<?=base_url()?>index.php/realestate/edit/' + row.realestateid + '" class="edit_btn"><img src="<?=base_url()?>images/edit.png" height="24" width="24" title="Chỉnh sửa tin BĐS"/>';},"bSortable": false,"bSearchable": false,"sWidth" :"30px"}],
+						"bProcessing": true,
+						"bServerSide": true,
+						"sAjaxSource": "<?=base_url()?>index.php/realestate/updatedatatable",
+						"fnServerData": function ( sSource, aoData, fnCallback ) {
+							$.getJSON(sSource, aoData, function(json) {
+								$('#ck_all').attr('checked',false);
+								fnCallback(json);
+							});
+						}
+					});
 		$('#ck_all').click(function() {
 			var checked_status = this.checked;
 			$("input[name='a_id[]']").each(function()
@@ -40,7 +51,7 @@
 				this.checked = checked_status;
 			});
 		});
-		$("input[name='a_id[]']").click(function() {
+		$("input[name='a_id[]']").live('click',function() {
 			$('#ck_all').attr('checked', false);
 			var flag = true;
 			if (this.checked) {
@@ -56,9 +67,9 @@
 				}
 			}
 		});
-		$('.edit_btn').hover(function(){
+		$('.edit_btn').live('mouseenter',function(){
 			$(this).children('img').attr('src','<?=base_url()?>images/edit_hover.png');
-		}, function(){
+		}).live('mouseleave', function(){
 			$(this).children('img').attr('src','<?=base_url()?>images/edit.png');
 		});
 		$('#confirm_view').dialog({ buttons:[
@@ -119,30 +130,24 @@
 					<button class="add_btn" id="add_btn"><img src="<?=base_url()?>images/plus.png" />Viết tin mới</button>
 				</div>
 				<div class="table_wrap">
+					<form action="<?=base_url()?>index.php/realestate/delete" method="post" id="re_frm">
 					<table border="0" cellspacing="0" cellpadding="0" id="account_table" class="display">
 						<thead>
 							<tr>
-								<th class="fixed_column">STT</th>
 								<th class="fixed_column"><input type="checkbox" name="c_all" id="ck_all" /></th>
 								<th>Tiêu đề</th>
-								<th>Ngày đăng</th>
+								<th>Người đăng</th>
+								<th>Ngày tạo</th>
 								<th>Loại giao dịch</th>
 								<th>Loại BĐS</th>
+								<th>Trạng thái</th>
 								<th class="fixed_column"></th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>1</td>
-								<td><input type="checkbox" name="a_id[]" value="1"/></td>
-								<td>Bán biệt thự tại Thủ Đức</td>
-								<td>2012-04-26</td>
-								<td>Cần bán</td>
-								<td>Biệt thự</td>
-								<td><a href="#" class="edit_btn"><img src="<?=base_url()?>images/edit.png" height="24" width="24" title="Chỉnh sửa tin BĐS"/></a></td>
-							</tr>
 						</tbody>
 					</table>
+					</form>
 				</div>
 			</div>
 		</div>
