@@ -41,7 +41,7 @@ class RealEstate_Model extends CI_Model{
      * Parameter 2:
      * Return:
      */
-    function UpdateItem($item,$lat,$lng){
+    function UpdateItem($realEstateId,$realEstate,$lat,$lng){
     
     }
     

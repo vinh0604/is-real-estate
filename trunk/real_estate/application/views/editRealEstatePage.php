@@ -14,8 +14,10 @@
 	<link rel="stylesheet" href="<?=base_url()?>css/image-form.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="<?=base_url()?>css/bootstrap-image-gallery.min.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="<?=base_url()?>css/jquery.fileupload-ui.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="<?=base_url()?>css/redmond/jquery-ui-1.8.18.custom.css" type="text/css" media="screen"/>
 	
 	<script src="<?=base_url()?>js/jquery-1.7.1.min.js" type="text/javascript"></script>
+	<script src="<?=base_url()?>js/jquery-ui-1.8.18.custom.min.js" type="text/javascript"></script>
 	<script src="<?=base_url()?>js/jquery.validationEngine.js" type="text/javascript"></script>
 	<script src="<?=base_url()?>js/jquery.validationEngine-vi.js" type="text/javascript"></script>
 	<script type="text/javascript" charset="utf-8">
@@ -49,9 +51,18 @@
 		$('#currency').val('<?=$realEstate['currency']?>');
 		$('#direction').val('<?=$realEstate['direction']?>');
 		$('#legalstatus').val('<?=$realEstate['legalstatus']?>');
+		
+		<?php if($this->session->flashdata('notice')):?>
+		$('#success_view').dialog({ buttons:[
+			    {text: "Đóng",click: function() { $(this).dialog("close"); } }
+			],
+			modal: true,
+			resizable: false,
+			draggable: false
+		});
+		<?php endif;?>
 	})
 	</script>
-	<script src="<?=base_url()?>js/jquery.ui.widget.js" type="text/javascript"></script>
 	<script src="<?=base_url()?>js/tmpl.min.js" type="text/javascript"></script>
 	<script src="<?=base_url()?>js/load-image.min.js" type="text/javascript"></script>
 	<script src="<?=base_url()?>js/canvas-to-blob.min.js" type="text/javascript"></script>
@@ -65,6 +76,9 @@
 	<script src="<?=base_url()?>js/main.js" type="text/javascript"></script>
 </head>
 <body>
+	<div id="success_view" title="Quản lý tin BĐS" style="display: none;">
+		<p><?=$this->session->flashdata('notice')?></p>
+	</div>
 	<?=$topBar?>
 	<div class="container">
 		<div class="main-content span-24">
