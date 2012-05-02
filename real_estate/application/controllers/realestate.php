@@ -92,7 +92,100 @@ class Realestate extends CI_Controller {
      */
 
     function UpdateItem() {
-        
+        $this->load->library('form_validation');
+		$this->lang->load('form_validation', 'vietnamese');
+		
+		$this->form_validation->set_rules('title', 'Tiêu đề tin', 'required');
+		$this->form_validation->set_rules('transaction', 'Loại giao dịch', 'required');
+		$this->form_validation->set_rules('category', 'Loại BĐS', 'required');
+		$this->form_validation->set_rules('address', 'Địa chỉ', 'required');
+		$this->form_validation->set_rules('price', 'Giá', 'required|is_numeric');
+		$this->form_validation->set_rules('area', 'Diện tích', 'required|is_numeric');
+		$this->form_validation->set_rules('contactname', 'Người liên hệ', 'required');
+		$this->form_validation->set_rules('contacttel', 'Điện thoại liên hệ', 'required');
+		$this->form_validation->set_rules('contactadd', 'Địa chỉ liên hệ', 'required');
+		
+		if ($this->form_validation->run() == FALSE)
+	    {
+	    	// reload new real estate form
+			$this->Edit();
+			return false;
+	    }
+		
+		// initializing real estate onbject
+		$realEstateId = $this->input->post('realestateid');
+		$realEstate = array();
+		$realEstate['title'] = $this->input->post('title');
+		$realEstate['transaction'] = $this->input->post('transaction');
+		$realEstate['categoryid'] = $this->input->post('category');
+		$realEstate['address'] = $this->input->post('address');
+		
+		// find and replace district and city in new address
+		$this->load->model('district_Model');
+		$this->load->model('city_Model');
+		$this->load->model('realEstate_Model');
+		$city = $this->city_Model->GetNameByID($this->input->post('city'));
+		if($this->input->post('district')){
+			$district = $this->district_Model->GetNameByID($this->input->post('district'));
+			$realEstate['districtid'] = $this->input->post('district');
+			// check if new address contain district name
+			if (!stripos($realEstate['address'],$district)) {
+				if (($pos = stripos($realEstate['address'],'quận')) || ($pos = stripos($realEstate['address'],'huyện'))) {
+					$realEstate['address'] = substr_replace($realEstate['address'],$district.', '.$city,$pos);
+				} else {
+					$realEstate['address'] .= ', '.$district.', '.$city;
+				}
+			}
+		// check if new address contain city name
+		} else if (!stripos($realEstate['address'],$city)) {
+			if (($pos = stripos($realEstate['address'],'quận')) || ($pos = stripos($realEstate['address'],'huyện'))) {
+				$realEstate['address'] = substr_replace($realEstate['address'],$city,$pos);
+			} else if (($pos = stripos($realEstate['address'],'thành phố')) || ($pos = stripos($realEstate['address'],'tp'))){
+				$realEstate['address'] = substr_replace($realEstate['address'],$city,$pos);
+			} else {
+				$realEstate['address'] .= ', '.$city;
+			}
+		}
+		
+		$realEstate['currency'] = $this->input->post('currency');
+		if($realEstate['currency'] == 'VND') {
+			$realEstate['price'] = floatval($this->input->post('price')) * 1000000;
+		} else {
+			$realEstate['price'] = floatval($this->input->post('price'));
+		}
+		$realEstate['unit'] = $this->input->post('unit');
+		$realEstate['area'] = $this->input->post('area');
+		$size = array();
+		if ($this->input->post('width')) {
+			$size[] = $this->input->post('width').'m';
+		}
+		if ($this->input->post('length')) {
+			$size[] = $this->input->post('length').'m';
+		}
+		$realEstate['size'] = implode(' x ', $size);
+		$realEstate['direction'] = $this->input->post('direction');
+		if ($this->input->post('alley')) {
+			$realEstate['alley'] = $this->input->post('alley');
+		}
+		$realEstate['legalstatus'] = $this->input->post('legalstatus');
+		$realEstate['description'] = $this->input->post('description');
+		$realEstate['contactname'] = $this->input->post('contactname');
+		$realEstate['contacttel'] = $this->input->post('contacttel');
+		$realEstate['contactadd'] = $this->input->post('contactadd');
+		$realEstate['remark'] = $this->input->post('remark');
+		$realEstate['userid'] = $this->session->userdata('user_id');
+		// get latitude and longitude
+		$lat = $this->input->post('lat');
+		$lng = $this->input->post('lng');
+		
+		$affected_rows = $this->realEstate_Model->UpdateItem($realEstateId,$realEstate,$lat,$lng);
+		
+		if ($affected_rows) {
+			$this->session->set_flashdata('notice', 'Thao tác cập nhật tin thực hiện thành công!');
+			redirect(base_url('index.php/realestate/edit/'.$realEstateId));
+		} else {
+			show_error("Không tìm thấy tin bất động sản yêu cầu!");
+		}
     }
 
     /*
@@ -286,7 +379,7 @@ class Realestate extends CI_Controller {
 		$data['userdata'] = $this->session->userdata;
         $data['topBar'] = $this->load->view('topBar',$data,true);
 
-		$data['topBar'] = $this->load->view('addImagePage',$data);
+		$this->load->view('addImagePage',$data);
 	}
 
 	/*
