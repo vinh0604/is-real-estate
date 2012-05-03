@@ -13,8 +13,11 @@
 		<li class="top-menu-item dropdown">
 			<a href="">Quản lý</a>
 			<ul class="sub-menu">
-				<li><a href="<?=base_url()?>index.php/user">Quản lý tài khoản</a></li>
 				<li><a href="<?=base_url()?>index.php/realestate/manage">Quản lý tin</a></li>
+				<?php if (array_key_exists('is_admin', $userdata) && $userdata['is_admin']):?>
+				<li><a href="<?=base_url()?>index.php/realestate/review">Duyệt tin</a></li>
+				<li><a href="<?=base_url()?>index.php/user">Quản lý tài khoản</a></li>
+				<?php endif;?>
 			</ul>
 		</li>
 	</ul>
