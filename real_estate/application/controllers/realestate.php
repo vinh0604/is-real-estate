@@ -173,7 +173,6 @@ class Realestate extends CI_Controller {
 		$realEstate['contacttel'] = $this->input->post('contacttel');
 		$realEstate['contactadd'] = $this->input->post('contactadd');
 		$realEstate['remark'] = $this->input->post('remark');
-		$realEstate['userid'] = $this->session->userdata('user_id');
 		// get latitude and longitude
 		$lat = $this->input->post('lat');
 		$lng = $this->input->post('lng');
@@ -198,10 +197,14 @@ class Realestate extends CI_Controller {
         $aRealEstateIds = $this->input->post('a_id');
 		
 		$this->load->model('realEstate_Model');
-		$this->realEstate_Model->DeleteItem($aRealEstateIds);
+		$affected_rows = $this->realEstate_Model->DeleteItem($aRealEstateIds);
 		
-		$this->session->set_flashdata('notice', 'Thao tác xóa thực hiện thành công!');
-		redirect(base_url('index.php/realestate/manage'));
+		if ($affected_rows) {
+			$this->session->set_flashdata('notice', 'Thao tác xóa thực hiện thành công!');
+			redirect(base_url('index.php/realestate/manage'));
+		} else {
+			show_error("Không tìm thấy tin bất động sản yêu cầu!");
+		}
     }
 
     /*

@@ -15,11 +15,12 @@ class RealEstate_Model extends CI_Model{
     
     
     /*
-     * Author:
-     * Summary: 
-     * Parameter 1:
-     * Parameter 2:
-     * Return:
+     * Author: VinhBSD
+     * Summary: add new real estate 
+     * Parameter 1: real estate object
+     * Parameter 2: latitude of real estate
+	 * Parameter 3: longitude of real estate
+     * Return: id of new real estate
      */
     function AddNewItem($realEstate,$lat,$lng){
     	$realEstate['status'] = ADDNEW;
@@ -35,14 +36,28 @@ class RealEstate_Model extends CI_Model{
     }
     
     /*
-     * Author:
-     * Summary: 
-     * Parameter 1:
-     * Parameter 2:
-     * Return:
+     * Author: VinhBSD
+     * Summary: update exist real estate
+     * Parameter 1: id of real estate 
+     * Parameter 2: real estate object
+	 * Parameter 3: latitude of real estate
+	 * Parameter 4: longitude of real estate
+     * Return: num of rows updated
      */
     function UpdateItem($realEstateId,$realEstate,$lat,$lng){
-    
+    	$realEstate['status'] = ADDNEW;
+		$this->db->where('realestateid', $realEstateId);
+		if (!$this->session->userdata('is_admin')) {
+			$this->db->where('userid', $this->session->userdata('user_id'));
+		}
+    	$lat = floatval($lat);
+		$lng = floatval($lng);
+    	if ($lat && $lng) {
+    		$this->db->set('geom',"setsrid(st_makepoint($lng,$lat),4326)",false);
+		}
+		$this->db->set('datemodified',"now()",false);
+		$this->db->update('realestate',$realEstate);
+		return $this->db->affected_rows();
     }
     
     /*
@@ -52,8 +67,31 @@ class RealEstate_Model extends CI_Model{
      * Return:
      */
     function DeleteItem($aRealEstateIDs){
+    	if (!$this->session->userdata('is_admin')) {
+			$this->db->where('userid', $this->session->userdata('user_id'));
+		}
         $this->db->where_in('realestateid', $aRealEstateIDs);
-		return $this->db->delete(array('photo','realestate'));
+		$this->db->delete(array('photo','realestate'));
+		$affectedRows = $this->db->affected_rows();
+		if ($affectedRows) {
+			foreach ($aRealEstateIDs as $id) {
+				$dir = FCPATH.'images/files/'.$id.'/';
+				if (is_dir($dir)) {
+					foreach(glob($dir.'*.*') as $v){
+					    unlink($v);
+					}
+					rmdir($dir);
+				}
+				$dir = FCPATH.'images/thumbnails/'.$id.'/';
+				if (is_dir($dir)) {
+					foreach(glob($dir.'*.*') as $v){
+					    unlink($v);
+					}
+					rmdir($dir);
+				}
+			}
+		}
+		return $affectedRows;
     }
     
     /*
