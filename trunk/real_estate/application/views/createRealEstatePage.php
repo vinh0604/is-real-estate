@@ -15,8 +15,28 @@
 	<script src="<?=base_url()?>js/jquery-1.7.1.min.js" type="text/javascript"></script>
 	<script src="<?=base_url()?>js/jquery.validationEngine.js" type="text/javascript"></script>
 	<script src="<?=base_url()?>js/jquery.validationEngine-vi.js" type="text/javascript"></script>
+	<script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDS5bb-pXbt4N27kkA9y1AS0nGxgciqTiU&sensor=true&language=vi">
+    </script>
 	<script type="text/javascript" charset="utf-8">
+	var geocoder;
+	function getLatLng() {
+		if ($('#address').val() && $('#city').val()) {
+			var address = $('#address').val();
+			if ($('#district').val()) {
+				address += ', ' + $("#district option:selected").text();
+			}
+			address += ', ' + $("#city option:selected").text();
+			geocoder.geocode( { 'address': address}, function(results, status) {
+		      if (status == google.maps.GeocoderStatus.OK) {
+				$('#lat').val(results[0].geometry.location.lat());
+				$('#lng').val(results[0].geometry.location.lng());
+		      }
+		    });
+		}
+	}
 	$(document).ready(function(){
+		geocoder = new google.maps.Geocoder();
 		$('.dropdown').hover(function() {
 			$(this).children('.sub-menu').slideDown(200);
 		}, function() {
@@ -33,6 +53,13 @@
 					 	}
 					 	$('#district').html(htmlDistrict.join(''));
 					 });
+			getLatLng();
+		});
+		$('#district').change(function(){
+			getLatLng();
+		});
+		$('#address').blur(function(){
+			getLatLng();
 		});
 		$('#re_frm').validationEngine('attach');
 		$('#map_marker').click(function(){
