@@ -20,7 +20,19 @@ class Realestate extends CI_Controller {
      */
 
     function index($realEstateId) {
-        
+        $data['userdata'] = $this->session->userdata;
+        $data['topBar'] = $this->load->view('topBar',$data,true);
+		
+		$this->load->model('realEstate_Model');
+		$this->load->model('photo_Model');
+		$data['realEstate'] = $this->realEstate_Model->FindByID($realEstateId);
+		
+		if($data['realEstate']) {
+			$data['photos'] =  $this->photo_Model->GetByRealEstateID($realEstateId);
+			$this->load->view('detailPage',$data);
+		} else {
+			show_404();
+		}
     }
 
     /*

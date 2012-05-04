@@ -258,13 +258,13 @@
 					<li>
 						<div class="news-wrap">
 							<div class="left-news">
-								<a href="<?=base_url()?>index.php/realestate/<?=$r['realestateid']?>">
+								<a href="<?=base_url()?>index.php/realestate/index/<?=$r['realestateid']?>">
 									<img src="<?=$r['url'] ? base_url('images/thumbnails/'.$r['realestateid'].'/'.$r['url']) : base_url('images/noimage.jpg')?>" alt="Hình địa ốc" width="64"/>
 								</a>
 							</div>
 							<div class="right-news">
 								<div class="news-title">
-									<a href="<?=base_url()?>index.php/realestate/<?=$r['realestateid']?>"><?=$r['title']?></a>
+									<a href="<?=base_url()?>index.php/realestate/index/<?=$r['realestateid']?>"><?=$r['title']?></a>
 								</div>
 							</div>
 						</div>
