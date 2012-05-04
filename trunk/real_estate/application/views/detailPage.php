@@ -51,7 +51,7 @@
 		}
 	}
 	$(document).ready(function(){
-		$("a[rel^='prettyPhoto']").prettyPhoto({social_tools:''});
+		$("a[rel^='prettyPhoto']").prettyPhoto({social_tools:'',deeplinking: false});
 		$('.dropdown').hover(function() {
 			$(this).children('.sub-menu').slideDown(200);
 		}, function() {
