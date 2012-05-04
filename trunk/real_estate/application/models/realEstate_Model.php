@@ -223,7 +223,7 @@ class RealEstate_Model extends CI_Model{
      * Return: real estate object if exists, null if not
      */
     function FindByID($realEstateID){
-        $sQuery = 'SELECT r.*,c.name as category 
+        $sQuery = 'SELECT r.*,c.name as category, st_asgeojson(geom) as location 
         		   FROM realestate r 
         		   JOIN "user" u ON u.userid = r.userid
         		   LEFT JOIN category c ON r.categoryid = c.categoryid 

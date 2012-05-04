@@ -19,32 +19,10 @@ class Photo_Model extends CI_Model {
      * Return:
      */
 
-    function AddPhotoByRealEstateID($lstPhoto, $realEstateID) {
-        
-    }
-
-    /*
-     * Author:
-     * Summary: 
-     * Parameter 1:
-     * Parameter 2:
-     * Return:
-     */
-
-    function DeletePhotoByRealEstateID($lstPhoto, $realEstateID) {
-        
-    }
-
-    /*
-     * Author:
-     * Summary: 
-     * Parameter 1:
-     * Parameter 2:
-     * Return:
-     */
-
-    function UpdatePhotoByRealEstateID($lstPhoto, $realEstateID) {
-        
+    function GetByRealEstateID($realEstateID) {
+        $sQuery = 'SELECT * FROM photo 
+        		   WHERE realestateid = ?';
+		return $this->db->query($sQuery,array($realEstateID))->result_array();
     }
 
 }
