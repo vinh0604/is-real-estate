@@ -46,7 +46,7 @@
 		$.getJSON('<?=base_url()?>index.php/home/getdetail',
 				  {id: realEstateId},
 				  function(realEstate) {
-				  	var url = '<?=base_url()?>index.php/realestate/' + realEstate.realestateid;
+				  	var url = '<?=base_url()?>index.php/realestate/index/' + realEstate.realestateid;
 				  	var price = '';
 				  	if (parseFloat(realEstate.price)) {
 				  		price = price.concat('<span class="info_price">',formatPrice(realEstate.price),realEstate.currency,'</span>');
