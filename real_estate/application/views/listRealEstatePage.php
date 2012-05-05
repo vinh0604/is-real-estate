@@ -15,8 +15,16 @@
 	<script src="<?=base_url()?>js/jquery-1.7.1.min.js" type="text/javascript"></script>
 	<script src="<?=base_url()?>js/jquery.pagination.js" type="text/javascript"></script>
 	<script type="text/javascript" charset="utf-8">
-	function pageselectCallback(){
-        return false;
+	var url = '<?=base_url()?>index.php/realestate/view?';
+	var TRANS = '<?=$transaction?>';
+	var CAT = '<?=$categoryId?>';
+	var trans_param = 'trans=' + TRANS;
+	function pageselectCallback(index,jq){
+        $.get('<?=base_url()?>index.php/realestate/updateview',
+        	{cat: CAT, trans: TRANS, page: index},
+        	function(data) {
+        		$('#content').html(data);
+        	});
     }
 	$(document).ready(function(){
 		$('.dropdown').hover(function() {
@@ -24,12 +32,31 @@
 		}, function() {
 			$(this).children('.sub-menu').hide();
 		});
-		$('#pagination').pagination(562, {callback: pageselectCallback, 
+		$('#city').change(function(){
+			$.getJSON('<?=base_url()?>index.php/realestate/getdistrict',
+					 {id: $('#city').val()},
+					 function(districts) {
+					 	var htmlDistrict = ['<option value="">Quận/ Huyện</option>'];
+					 	console.log(districts);
+					 	for(i in districts) {
+					 		htmlDistrict.push(''.concat('<option value="',districts[i].districtid,'">',districts[i].name,'</option>'));
+					 	}
+					 	$('#district').html(htmlDistrict.join(''));
+					 });
+		});
+		$('#category').val('<?=$categoryId?>');
+		$('#category').change(function(){
+			var cat_param = 'cat=' + $('#category').val();
+			window.location.href = url.concat(trans_param,'&',cat_param);
+		});
+		<?php if($count):?>
+		$('#pagination').pagination(<?=$count?>, {callback: pageselectCallback, 
         										    prev_text: '&lt',
         										    next_text: '&gt',
         										    num_display_entries: 5,
-        										    num_edge_entries: 1,
+        										    num_edge_entries: 2,
         										    items_per_page: 10});
+        <?php endif;?>
 	})
 	</script>
 </head>
@@ -50,13 +77,16 @@
 						</tr>
 						<tr>
 							<td>
-								<select name="city" id="city">
-									<option value="0">Tỉnh/Thành phố</option>
+								<select name="city" id="city" style="width:250px;">
+									<option value="">Tỉnh/Thành phố</option>
+									<?php foreach($cities as $c):?>
+									<option value="<?=$c->cityid?>"><?=$c->name?></option>
+									<?php endforeach;?>
 								</select>
 							</td>
-							<td>
+							<td style="width: 145px;">
 								<select name="district" id="district">
-									<option value="0">Quận/ Huyện</option>
+									<option value="">Quận/ Huyện</option>
 								</select>
 							</td>
 						</tr>
@@ -67,66 +97,15 @@
 		<div class="main-wrapper span-24">
 			<div class="filter-wrapper span-22">
 				<span>Loại bất động sản: </span> 
-				<select name="re_type" id="re_type">
-					<option value="0">Tất cả</option>
+				<select name="category" id="category">
+					<option value="">Tất cả</option>
+					<?php foreach($categories as $c):?>
+					<option value="<?=$c->categoryid?>"><?=$c->name?></option>
+					<?php endforeach;?>
 				</select>
 			</div>
-			<div class="list-wrapper span-24">
-				<div class="list-row span-24">
-					<div class="left-news span-12">
-						<table>
-							<tr>
-								<td class="news-image-wrap">
-									<a href="<?=base_url()?>index.php/realestate"><img src="<?=base_url()?>images/thumbnails/1.jpg" alt="Hình bất động sản" width="132"/></a>
-									<div class="news-operation">
-										<span class="blue_btn" style="float: left;">
-											<a href="#" class="left_btn" title="Thêm vào giỏ tin">
-												<div class="shopping_cart"></div>
-											</a>
-										</span>
-										<span class="blue_btn">
-											<a href="<?=base_url()?>index.php/realestate" class="right_btn">Xem thêm
-											</a>
-										</span>
-									</div>
-								</td>
-								<td class="news-detail-wrap">
-									<div class="news-title"><a href="<?=base_url()?>index.php/realestate">Bán biệt thự ở Thủ Đức</a></div>
-									<div>
-										<b>Địa chỉ: </b>108/7, đường 11, phường Linh Xuân, quận Thủ Đức, TP Hồ Chí Minh
-									</div>
-									<div>
-										<table>
-											<tr>
-												<td>
-													<b>Giao dịch: </b>Cho thuê
-												</td>
-												<td>
-													<b>Loại BĐS: </b> Biệt thự
-												</td>
-											</tr>
-										</table>
-									</div>
-									<div>
-										<table>
-											<tr>
-												<td>
-													<b>Kích thước: </b> 20m x 15m
-												</td>
-												<td>
-													<b>Diện tích: </b> 300 m2
-												</td>
-											</tr>
-										</table>
-									</div>
-									<div>
-										<b>Giá: </b> <span class="price_tag">15,000,000 VND/m2</span>
-									</div>
-								</td>
-							</tr>
-						</table>
-					</div>
-				</div>
+			<div id="content" class="list-wrapper span-24">
+				<?=$content?>
 			</div>
 		</div>
 		<div class="nav-wrap span-24" style="margin-top: 30px;">

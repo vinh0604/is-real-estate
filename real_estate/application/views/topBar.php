@@ -4,8 +4,8 @@
 		<li class="top-menu-item dropdown">
 			<a href="#">Thông tin nhà đất</a>
 			<ul class="sub-menu">
-				<li><a href="<?=base_url()?>index.php/realestate">Nhà đất bán</a></li>
-				<li><a href="<?=base_url()?>index.php/realestate">Nhà đất cho thuê</a></li>
+				<li><a href="<?=base_url()?>index.php/realestate/view?trans=Bán">Nhà đất bán</a></li>
+				<li><a href="<?=base_url()?>index.php/realestate/view?trans=Thuê">Nhà đất cho thuê</a></li>
 			</ul>
 		</li>
 		<li class="top-menu-item"><a href="<?=base_url()?>index.php/search">Tìm kiếm</a></li>

@@ -133,7 +133,7 @@
 			$.getJSON('<?=base_url()?>index.php/home/getdistrict',
 					 {id: $('#city').val()},
 					 function(districts) {
-					 	var htmlDistrict = ['<option value="0">Quận/ Huyện</option>'];
+					 	var htmlDistrict = ['<option value="">Quận/ Huyện</option>'];
 					 	console.log(districts);
 					 	for(i in districts) {
 					 		htmlDistrict.push(''.concat('<option value="',districts[i].districtid,'">',districts[i].name,'</option>'));
@@ -225,7 +225,7 @@
 						<tr>
 							<td>
 								<select name="city" id="city" style="width:250px;">
-									<option value="0">Tỉnh/Thành phố</option>
+									<option value="">Tỉnh/Thành phố</option>
 									<?php foreach ($cities as $c):?>
 										<option value="<?=$c->cityid?>"><?=$c->name?></option>
 									<?php endforeach;?>
