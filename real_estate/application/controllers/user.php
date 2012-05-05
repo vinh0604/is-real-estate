@@ -19,7 +19,8 @@ class User extends CI_Controller {
 
     function index() {
         $this->load->model('User_Model');
-        $data['topBar'] = $this->load->view('topBar', null, true);
+        $data['userdata'] = $this->session->userdata;
+        $data['topBar'] = $this->load->view('topBar', $data, true);
         $data['lstAdmin'] = $this->User_Model->GetALlAdmins();
         $this->load->view('manageUserPage', $data);
     }
@@ -34,7 +35,7 @@ class User extends CI_Controller {
 
     function GetUser() {
         $this->load->model("User_Model");
-        $username=$this->input->post("username");
+        $username = $this->input->post("username");
         $res["row"] = $this->User_Model->GetUser($username);
         echo '{"res":' . json_encode($res) . '}';
     }
@@ -50,7 +51,7 @@ class User extends CI_Controller {
     function AddNewUser() {
         $account = array
             ("username" => $this->input->post("username"),
-            "password" => md5($this->input->post("password")),
+            "password" => md5($this->input->post("username")),
             "email" => $this->input->post("email"),
             "name" => $this->input->post("fullname"),
             "tel" => $this->input->post("phone"),
@@ -89,22 +90,23 @@ class User extends CI_Controller {
         $list = $this->input->post("list");
         $res = array();
         for ($i = 0; $i < count($list); $i++) {
-            $res[$i]["userid"] = (string)$list[$i];
-            $res[$i]["result"] = (string)$this->User_Model->DeleteUser((int) $list[$i]);
+            $res[$i]["userid"] = (string) $list[$i];
+            $res[$i]["result"] = (string) $this->User_Model->DeleteUser((int) $list[$i]);
         }
         $json['result'] = $res;
         echo '{"res":' . json_encode($json) . '}';
     }
 
-        /*
+    /*
      * Author: Hiep
      * Summary: Update User
      * Parameter 1:
      * Parameter 2:
      * Return:
      */
-    function UpdateUser(){
-         $account = array
+
+    function UpdateUser() {
+        $account = array
             ("username" => $this->input->post("username"),
             "email" => $this->input->post("email"),
             "name" => $this->input->post("fullname"),
@@ -112,10 +114,10 @@ class User extends CI_Controller {
             "address" => $this->input->post("address"),
             "birthday" => $this->input->post("birthdate"),
         );
-         $this->load->model('User_Model');
-         echo $this->User_Model->UpdateUser($account);
+        $this->load->model('User_Model');
+        echo $this->User_Model->UpdateUser($account);
     }
-    
+
     /*
      * Author: Hiep
      * Summary: Load view of changing password
@@ -125,7 +127,8 @@ class User extends CI_Controller {
      */
 
     function Change() {
-        $data['topBar'] = $this->load->view('topBar', null, true);
+        $data['userdata'] = $this->session->userdata;
+        $data['topBar'] = $this->load->view('topBar', $data, true);
         $this->load->view('changePasswordPage', $data);
     }
 
