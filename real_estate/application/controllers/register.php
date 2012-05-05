@@ -20,7 +20,8 @@ class Register extends CI_Controller {
      */
 
     function index() {
-        $data['topBar'] = $this->load->view('topBar', null, true);
+        $data['userdata'] = $this->session->userdata;
+        $data['topBar'] = $this->load->view('topBar', $data, true);
         $this->load->view('registerPage', $data);
     }
 
