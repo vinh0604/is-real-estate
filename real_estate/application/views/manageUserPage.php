@@ -119,7 +119,7 @@
                     $('#address').val("");
                     $('#birthdate').val("");
                 });
-		UpdateAffect();
+                UpdateAffect();
                 
             })
             
@@ -207,7 +207,8 @@
                         }
                     ]});
             }
-            function UpdateUser(){ var valid= $('#account_frm').validationEngine('validate');
+            function UpdateUser(){ 
+                var valid= $('#account_frm').validationEngine('validate');
                 if (valid==true){
                     $.ajax({
                         type: "POST",
