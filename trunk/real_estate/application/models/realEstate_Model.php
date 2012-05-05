@@ -351,5 +351,59 @@ class RealEstate_Model extends CI_Model{
 			return null;
 		}
     }
+	
+	/*
+     * Author: VinhBSD
+     * Summary: get accepted real estates for listing
+     * Return: array of real estates object
+     */
+    function GetRealEstatesForListing($categoryId,$transaction,$limit,$offset){
+    	$sQuery = 'SELECT realestateid,title,address,transaction,size,area,price,currency,unit,
+    					  (SELECT url 
+						   FROM photo p 
+						   WHERE p.realestateid = r.realestateid 
+						   LIMIT 1) as url,
+						  c.name as category
+    			   FROM realestate r
+    			   LEFT JOIN category c ON r.categoryid = c.categoryid
+    			   WHERE r.status = ?'; 
+		$aParams = array(ACCEPT);
+    	if ($categoryId) {
+			$sQuery .= ' AND r.categoryid = ?';
+			$aParams[] = $categoryId;
+		}
+		if ($transaction) {
+			$sQuery .= ' AND transaction = ?';
+			$aParams[] = $transaction;
+		}		     
+	   	$sQuery .= 'LIMIT ? OFFSET ?';
+		$aParams[] = $limit;
+		$aParams[] = $offset;
+		
+		$result = $this->db->query($sQuery,$aParams)->result_array();
+		return $result;
+    }
+	
+	/*
+     * Author: VinhBSD
+     * Summary: count all real estates for pagination in listing
+     * Return: num of real estates
+     */
+    function CountAllRealEstates($categoryId,$transaction) {
+    	$sQuery = 'SELECT count(*) as count
+    			   FROM realestate r
+    			   WHERE r.status = ?'; 
+		$aParams = array(ACCEPT);
+    	if ($categoryId) {
+			$sQuery .= ' AND r.categoryid = ?';
+			$aParams[] = $categoryId;
+		}
+		if ($transaction) {
+			$sQuery .= ' AND transaction = ?';
+			$aParams[] = $transaction;
+		}
+	
+		return $this->db->query($sQuery,$aParams)->row()->count;
+    }
 }
 ?>

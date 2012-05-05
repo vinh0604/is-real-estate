@@ -462,6 +462,83 @@ class Realestate extends CI_Controller {
 		}
 		
     }
+
+	/*
+     * Author: VinhBSD
+     * Summary: get real estates for showing by category and transaction
+     * Return:
+     */
+    
+    function View() {
+    	$data['userdata'] = $this->session->userdata;
+        $data['topBar'] = $this->load->view('topBar',$data,true);
+		
+		$categoryId = '';
+		if($this->input->get('cat')) {
+			$categoryId = $this->input->get('cat');
+		}
+		$transaction = '';
+		if($this->input->get('trans')) {
+			$transaction = $this->input->get('trans');
+		}
+		
+		$this->load->model('realEstate_Model');
+		$data['realEstates'] = $this->realEstate_Model->GetRealEstatesForListing(
+															$categoryId,$transaction,10,0);
+		$this->load->helper('utils');
+		$data['content'] = $this->load->view('listContentPage',$data,true);
+		
+		$data['count'] = $this->realEstate_Model->CountAllRealEstates($categoryId,$transaction);
+		$data['categoryId'] = $categoryId;
+		$data['transaction'] = $transaction;
+		
+		$this->load->model('category_Model');
+		$data['categories'] = $this->category_Model->GetCategories();
+		$this->load->model('city_Model');
+		$data['cities'] = $this->city_Model->GetCities();
+		
+		$this->load->view('listRealEstatePage',$data);
+    }
+
+	/*
+     * Author: VinhBSD
+     * Summary: get detail of specific real estates
+     * Return: 
+     */
+    function GetDistrict() {
+		$cityId = $this->input->get('id');
+		
+		$this->load->model('district_Model');
+		$districts = $this->district_Model->GetDistrictsByCityID($cityId);
+		$this->output->set_output(json_encode($districts));
+	}
+
+	/*
+     * Author: VinhBSD
+     * Summary: update content when changing page in list view
+     * Return:
+     */
+    
+    function UpdateView() {
+    	$categoryId = '';
+		if($this->input->get('cat')) {
+			$categoryId = $this->input->get('cat');
+		}
+		$transaction = '';
+		if($this->input->get('trans')) {
+			$transaction = $this->input->get('trans');
+		}
+		$offset = 0;
+		if($this->input->get('page')) {
+			$offset = intval($this->input->get('page')) * 10;
+		}
+		
+		$this->load->model('realEstate_Model');
+		$data['realEstates'] = $this->realEstate_Model->GetRealEstatesForListing(
+															$categoryId,$transaction,10,$offset);
+		$this->load->helper('utils');
+		$this->load->view('listContentPage',$data);
+    }
 }
 
 ?>

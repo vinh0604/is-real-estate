@@ -132,9 +132,9 @@
 							<td class="title" style="width: 55px;">Mã BĐS:</td>
 							<td style="color: #FA7003;font-weight: bold;"><?=$realEstate['realestateid']?></td>
 							<td class="title" style="width: 55px;">Giao dịch:</td>
-							<td style="width: 67px;"><a href="#"><?=$realEstate['transaction']?></a></td>
+							<td style="width: 75px;"><a href="<?=base_url()?>index.php/realestate/view?trans=<?=$realEstate['transaction']?>"><?=$realEstate['transaction']?></a></td>
 							<td class="title" style="width: 55px;">Loại BĐS:</td>
-							<td><a href="<?=base_url()?>index.php/realestate/category/<?=$realEstate['categoryid']?>"><?=$realEstate['category']?></a></td>
+							<td><a href="<?=base_url()?>index.php/realestate/view?cat=<?=$realEstate['categoryid']?>"><?=$realEstate['category']?></a></td>
 						</tr>
 						<tr>
 							<td class="title">Địa chỉ:</td>
