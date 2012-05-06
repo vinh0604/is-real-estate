@@ -22,8 +22,8 @@
 		</li>
 	</ul>
 	<span id="top-right-area">
-		<a href="<?=base_url()?>index.php/shoppingcart" class="cart_btn">
-			<span class="cart_item_num"><?=array_key_exists('cart_num',$userdata) ? $userdata['cart_num'] : 0 ?></span>
+		<a href="<?=base_url()?>index.php/cart" class="cart_btn">
+			<span id="cart_item_num" class="cart_item_num"><?=array_key_exists('cart',$userdata) ? count($userdata['cart']) : 0 ?></span>
 			<span class="cart_img_holder">Giỏ tin</span>
 		</a>
 		<ul class="login_signup_wrap">
