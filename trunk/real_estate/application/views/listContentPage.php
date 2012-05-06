@@ -14,7 +14,7 @@
 					</a>
 					<div class="news-operation">
 						<span class="blue_btn" style="float: left;">
-							<a href="#" class="left_btn" title="Thêm vào giỏ tin">
+							<a href="#" class="left_btn add_cart_btn" title="Thêm vào giỏ tin" reid="<?=$realEstates[$i]['realestateid']?>">
 								<div class="shopping_cart"></div>
 							</a>
 						</span>
@@ -71,7 +71,7 @@
 					</a>
 					<div class="news-operation">
 						<span class="blue_btn" style="float: left;">
-							<a href="#" class="left_btn" title="Thêm vào giỏ tin">
+							<a href="#" class="left_btn add_cart_btn" title="Thêm vào giỏ tin" reid="<?=$realEstates[$i+1]['realestateid']?>">
 								<div class="shopping_cart"></div>
 							</a>
 						</span>
@@ -132,7 +132,7 @@
 					</a>
 					<div class="news-operation">
 						<span class="blue_btn" style="float: left;">
-							<a href="#" class="left_btn" title="Thêm vào giỏ tin">
+							<a href="#" class="left_btn add_cart_btn" title="Thêm vào giỏ tin" reid="<?=$realEstates[$i]['realestateid']?>">
 								<div class="shopping_cart"></div>
 							</a>
 						</span>

@@ -11,9 +11,12 @@
 	<link rel="stylesheet" href="<?=base_url()?>css/style.css" type="text/css" media="screen"/>
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="<?=base_url()?>css/pagination.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="<?=base_url()?>css/jqdialog.css" type="text/css" media="screen"/>
 	
 	<script src="<?=base_url()?>js/jquery-1.7.1.min.js" type="text/javascript"></script>
 	<script src="<?=base_url()?>js/jquery.pagination.js" type="text/javascript"></script>
+	<script src="<?=base_url()?>js/jqdialog.min.js" type="text/javascript"></script>
+    <script src="<?=base_url()?>js/jquery.cart.js" type="text/javascript"></script>
 	<script type="text/javascript" charset="utf-8">
 	var url = '<?=base_url()?>index.php/realestate/view?';
 	var TRANS = '<?=$transaction?>';
@@ -49,6 +52,7 @@
 			var cat_param = 'cat=' + $('#category').val();
 			window.location.href = url.concat(trans_param,'&',cat_param);
 		});
+		$('.add_cart_btn').spCart('<?=base_url()?>index.php/cart/add');
 		<?php if($count):?>
 		$('#pagination').pagination(<?=$count?>, {callback: pageselectCallback, 
         										    prev_text: '&lt',

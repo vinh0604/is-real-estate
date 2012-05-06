@@ -12,6 +12,7 @@
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="<?=base_url()?>css/lionbars.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="<?=base_url()?>css/context.menu.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="<?=base_url()?>css/jqdialog.css" type="text/css" media="screen"/>
 	
 	<script src="<?=base_url()?>js/jquery-1.7.1.min.js" type="text/javascript"></script>
 	<script src="<?=base_url()?>js/GeoJSON.js" type="text/javascript"></script>
@@ -22,6 +23,8 @@
     </script>
     <script src="<?=base_url()?>js/context.menu.js" type="text/javascript"></script>
     <script src="<?=base_url()?>js/common.js" type="text/javascript"></script>
+    <script src="<?=base_url()?>js/jqdialog.min.js" type="text/javascript"></script>
+    <script src="<?=base_url()?>js/jquery.cart.js" type="text/javascript"></script>
 	<script type="text/javascript" charset="utf-8">
 	var SALE = 'Bán';
 	var LEASE = 'Thuê';
@@ -141,6 +144,8 @@
 					 	$('#district').html(htmlDistrict.join(''));
 					 });
 		});
+		
+		$('.add_cart').spCart('<?=base_url()?>index.php/cart/add');
 		
 		$('.direction_link').live('click',function() {
 			toPosition = new google.maps.LatLng($(this).attr('lat'),$(this).attr('lng'));

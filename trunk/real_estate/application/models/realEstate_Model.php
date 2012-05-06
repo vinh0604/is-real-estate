@@ -405,5 +405,18 @@ class RealEstate_Model extends CI_Model{
 	
 		return $this->db->query($sQuery,$aParams)->row()->count;
     }
+
+	/*
+     * Author: VinhBSD
+     * Summary: check if an real estate with provided ID exist
+     * Return: TRUE if exist, FALSE if not
+     */
+    function Exist($realEstateId) {
+    	$sQuery = 'SELECT 1 FROM realestate
+    			   WHERE status = ? and realestateid = ?';
+		$query = $this->db->query($sQuery,array(ACCEPT,$realEstateId));
+		
+		return $query->num_rows() ? true : false; 
+    }
 }
 ?>

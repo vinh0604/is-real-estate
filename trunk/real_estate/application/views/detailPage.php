@@ -12,6 +12,7 @@
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="<?=base_url()?>css/prettyPhoto.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="<?=base_url()?>css/context.menu.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="<?=base_url()?>css/jqdialog.css" type="text/css" media="screen"/>
 	
 	<script src="<?=base_url()?>js/jquery-1.7.1.min.js" type="text/javascript"></script>
 	<script src="<?=base_url()?>js/jquery.prettyPhoto.js" type="text/javascript"></script>
@@ -21,6 +22,8 @@
     </script>
     <script src="<?=base_url()?>js/context.menu.js" type="text/javascript"></script>
     <script src="<?=base_url()?>js/common.js" type="text/javascript"></script>
+	<script src="<?=base_url()?>js/jqdialog.min.js" type="text/javascript"></script>
+    <script src="<?=base_url()?>js/jquery.cart.js" type="text/javascript"></script>
 	<script type="text/javascript" charset="utf-8">
 	var SALE = 'Bán';
 	var LEASE = 'Thuê';
@@ -57,6 +60,7 @@
 		}, function() {
 			$(this).children('.sub-menu').hide();
 		});
+		$('.submit_btn').spCart('<?=base_url()?>index.php/cart/add');
 		
 		var icon = '<?=base_url()?>images/house_sale.png';
 		if ('<?=$realEstate['transaction']?>' == LEASE) {
@@ -155,7 +159,7 @@
 						<tr>
 							<td colspan="6">
 								<div style="height: 30px;text-align: right;">
-									<button class="submit_btn">
+									<button class="submit_btn" reid="<?=$realEstate['realestateid']?>">
 										<img src="<?=base_url()?>images/shopping_cart.png" alt="" style="vertical-align: middle;"/>
 										Thêm vào giỏ tin
 									</button>
