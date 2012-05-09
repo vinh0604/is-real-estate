@@ -173,7 +173,22 @@ class User_Model extends CI_Model {
 		}
         return null;
     }
+	
+	/*
+     * Author: VinhBSD
+     * Summary: get users' email by real estate id
+     * Parameter 1: user id
+     * Return: user object if user exists, else return NULL
+     */
 
+     function GetInfoByRealEstate($realEstateIds) {
+     	$this->db->select('name, email, realestateid');
+		$this->db->from('user u');
+		$this->db->join('realestate r', 'r.userid = u.userid');
+		$this->db->where_in('r.realestateid',$realEstateIds);
+		
+		return $this->db->get()->result_array();
+     }
 }
 
 ?>

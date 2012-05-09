@@ -6,6 +6,7 @@
  */
 define("ACCEPT", 'Đã duyệt');
 define("ADDNEW", 'Chưa duyệt');
+define("DENIED", 'Từ chối');
 
 class RealEstate_Model extends CI_Model{
 
@@ -112,8 +113,15 @@ class RealEstate_Model extends CI_Model{
      * Parameter 2:
      * Return:
      */
-    function UpdateStatus($realEstateID,$status){
-        
+    function UpdateStatus($realEstateIDs,$isAccepted){
+        $this->db->where_in('realestateid',$realEstateIDs);
+		if ($isAccepted) {
+			$this->db->update('realestate',array('status'=>ACCEPT));
+		} else {
+			$this->db->update('realestate',array('status'=>DENIED));
+		}
+		
+		return $this->db->affected_rows();
     }
     
     /*
@@ -333,7 +341,7 @@ class RealEstate_Model extends CI_Model{
      * Return: real estate object if exists, null if not
      */
     function FindByIDForEdit($realEstateID){
-        $sQuery = 'SELECT r.*,st_astext(r.geom) as position, c.name as category, d.cityid 
+        $sQuery = 'SELECT r.*,st_astext(r.geom) as position, c.name as category, d.cityid, st_asgeojson(geom) as location 
         		   FROM realestate r 
         		   LEFT JOIN category c ON r.categoryid = c.categoryid 
         		   LEFT JOIN district d ON r.districtid = d.districtid
@@ -417,6 +425,55 @@ class RealEstate_Model extends CI_Model{
 		$query = $this->db->query($sQuery,array(ACCEPT,$realEstateId));
 		
 		return $query->num_rows() ? true : false; 
+    }
+	
+	/*
+     * Author: VinhBSD
+     * Summary: get real estates data for data table in reivew page 
+     * Return: 
+     */
+    function GetRealEstateForReview($sFilter, $iSort, $sSortDir, $iLimit, $iOffset) {
+    	$aColumns = array(1 => 'title', 
+						  2 => 'u.username', 
+						  3 => 'date', 
+						  4 => 'transaction', 
+						  5 => 'category');
+		$aParams = array(ADDNEW);
+		$aResult = array();
+		$sSelect = 'SELECT realestateid, title, date, transaction, c.name as category, u.username, u.userid ';
+		$sQuery = 'FROM realestate r 
+        		   JOIN "user" u ON u.userid = r.userid
+        		   LEFT JOIN category c ON r.categoryid = c.categoryid 
+        		   WHERE r.status = ? ';
+		if($sFilter) {
+			$sQuery .= 'AND (title LIKE ? OR transaction LIKE ? OR c.name LIKE ? OR u.username LIKE ? OR status LIKE ?) ';
+			for ($i = 0; $i < 5; ++$i ) {
+				$aParams[] = '%'.$sFilter.'%';
+			}
+		}		   
+		$query = $this->db->query("SELECT count(*) as count ".$sQuery,$aParams);
+		$aResult['iTotalDisplayRecords'] = $query->row()->count;; 
+		
+		if(array_key_exists($iSort,$aColumns)) {
+			$sSortDir = addslashes($sSortDir);
+			$sQuery .= "ORDER BY $aColumns[$iSort] $sSortDir ";
+		}
+		if($iLimit)	{
+			$sQuery .= 'LIMIT ? ';
+			$aParams[] = $iLimit;
+		}
+		if($iOffset)	{
+			$sQuery .= 'OFFSET ?';
+			$aParams[] = $iOffset;
+		}
+		$query = $this->db->query($sSelect.$sQuery,$aParams);
+		$aResult['aaData'] = $query->result_array();
+		
+		$aCountParams = array(ADDNEW);
+		$sQuery = 'SELECT count(*) as count FROM realestate WHERE status = ?';
+		$aResult['iTotalRecords'] = $this->db->query($sQuery,$aCountParams)->row()->count;
+		
+		return $aResult;
     }
 }
 ?>
