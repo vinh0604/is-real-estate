@@ -228,7 +228,26 @@ class Realestate extends CI_Controller {
      */
 
     function Accept() {
-        
+		if ($this->input->post('ids')) {
+			$realEstateIds = json_decode($this->input->post('ids'));
+			
+			$this->load->model('realEstate_Model');
+			$affected_rows = $this->realEstate_Model->UpdateStatus($realEstateIds,true);
+			
+			if($affected_rows > 0) {
+				$this->load->model('user_Model');
+				$infos = $this->user_Model->GetInfoByRealEstate($realEstateIds);
+				foreach ($infos as $info) {
+					$content = $this->load->view('accept_mail_template',$info,true);
+					$this->SendReviewEmail($info['email'], $content);
+				}
+				$this->session->set_flashdata('notice','Xét duyệt tin thành công. Email thông báo đã được gửi đến người dùng!');
+				redirect(base_url('index.php/realestate/review'));
+				return true;
+			}
+		}
+		$this->session->set_flashdata('notice','Xét duyệt tin không thành công. Vui lòng thử lại!');
+		redirect(base_url('index.php/realestate/review'));
     }
 
     /*
@@ -240,7 +259,28 @@ class Realestate extends CI_Controller {
      */
 
     function Deny() {
-        
+        if ($this->input->post('ids')) {
+			$realEstateIds = json_decode($this->input->post('ids'));
+			$reason = $this->input->post('reason');
+			
+			$this->load->model('realEstate_Model');
+			$affected_rows = $this->realEstate_Model->UpdateStatus($realEstateIds,false);
+			
+			if($affected_rows > 0) {
+				$this->load->model('user_Model');
+				$infos = $this->user_Model->GetInfoByRealEstate($realEstateIds);
+				foreach ($infos as $info) {
+					$info['reason'] = $reason;
+					$content = $this->load->view('denied_mail_template',$info,true);
+					$this->SendReviewEmail($info['email'], $content);
+				}
+				$this->session->set_flashdata('notice','Xét duyệt tin thành công. Email thông báo đã được gửi đến người dùng!');
+				redirect(base_url('index.php/realestate/review'));
+				return true;
+			}
+		}
+		$this->session->set_flashdata('notice','Xét duyệt tin không thành công. Vui lòng thử lại!');
+		redirect(base_url('index.php/realestate/review'));
     }
 
     /*
@@ -251,8 +291,20 @@ class Realestate extends CI_Controller {
      * Return:
      */
 
-    function GetDetailForReview() {
-        
+    function GetDetailForReview($realEstateId) {
+        $data['userdata'] = $this->session->userdata;
+        $data['topBar'] = $this->load->view('topBar',$data,true);
+		
+		$this->load->model('realEstate_Model');
+		$this->load->model('photo_Model');
+		$data['realEstate'] = $this->realEstate_Model->FindByIDForEdit($realEstateId);
+		
+		if($data['realEstate']) {
+			$data['photos'] =  $this->photo_Model->GetByRealEstateID($realEstateId);
+			$this->load->view('detailPage',$data);
+		} else {
+			show_404();
+		}
     }
 
     /*
@@ -263,8 +315,13 @@ class Realestate extends CI_Controller {
      * Return:
      */
 
-    function SendReviewEmail() {
-        
+    private function SendReviewEmail($email,$content) {
+        $this->load->library('email');  
+		$this->email->from('re2yteam@gmail.com','Review');  
+		$this->email->to($email);  
+		$this->email->subject('Xét duyệt tin đăng hoàn tất');  
+		$this->email->message($content);  
+		$this->email->send();
     }
 	
 	 /*
@@ -538,6 +595,45 @@ class Realestate extends CI_Controller {
 															$categoryId,$transaction,10,$offset);
 		$this->load->helper('utils');
 		$this->load->view('listContentPage',$data);
+    }
+	
+	/*
+     * Author: VinhBSD
+     * Summary: load review page of new real estates
+     * Return:
+     */
+    
+    function Review() {
+    	$data['userdata'] = $this->session->userdata;
+        $data['topBar'] = $this->load->view('topBar',$data,true);
+		
+		$this->load->view('reviewPage',$data);
+    }
+	
+	/*
+     * Author: VinhBSD
+     * Summary: update table data in review page
+     * Return:
+     */
+    
+    function UpdateDataReview() {
+    	$iLimit = $this->input->get('iDisplayLength');
+		$iOffset = $this->input->get('iDisplayStart');
+		$sFilter = $this->input->get('sSearch');
+		$iSort = null;
+		$sSortDir = null;
+		for ( $i=0 ; $i<intval($this->input->get('iSortingCols')) ; $i++ )
+		{
+			if ($this->input->get('bSortable_'.intval($this->input->get('iSortCol_'.$i))) == "true" )
+			{
+				$iSort = $this->input->get('iSortCol_'.$i);
+				$sSortDir = $this->input->get('sSortDir_'.$i);
+			}
+		}
+		$this->load->model('realEstate_Model');
+		$result = $this->realEstate_Model->GetRealEstateForReview($sFilter, $iSort, $sSortDir, $iLimit, $iOffset);
+		$result['sEcho'] = $this->input->get('sEcho');
+		$this->output->set_output(json_encode($result));
     }
 }
 
