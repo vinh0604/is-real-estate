@@ -20,7 +20,16 @@ class Cart extends CI_Controller {
      */
 
     function index() {
-        
+        $data['userdata'] = $this->session->userdata;
+        $data['topBar'] = $this->load->view('topBar',$data,true);
+		
+		$this->load->model('realEstate_Model');
+		if ($this->session->userdata('cart')) {
+			$data['realEstates'] = $this->realEstate_Model->GetItemByCart($this->session->userdata('cart'));
+		} else {
+			$data['realEstates'] = array();
+		}
+		$this->load->view('cartPage',$data);
     }
 	
 	/*
