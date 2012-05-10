@@ -25,23 +25,14 @@
 		});
 		reTable = $('#account_table').dataTable({
 						"bJQueryUI": true,
-						"aaSorting": [[3,'desc']],
-						"aoColumns": [{"mDataProp" : function(row,eType) { return '<input type="checkbox" name="a_id[]" value="' + row.realestateid + '"/>';},"bSortable": false,"bSearchable": false,"sWidth" :"30px"},
-									  {"mDataProp" : "title","sWidth" :"200px"},
-									  {"mDataProp" : function(row,eType) {return '<a href="<?=base_url()?>index.php/user/' + row.userid + '">' + row.username + '</a>';}},
-									  {"mDataProp" : "date"},
-									  {"mDataProp" : "transaction"},
-									  {"mDataProp" : "category"},
-									  {"mDataProp" : function(row,eType) {return '<a href="<?=base_url()?>index.php/realestate/getdetailforreview/' + row.realestateid + '" class="edit_btn"><img src="<?=base_url()?>images/view_detail.png" height="24" width="24" title="Chi tiết tin BĐS"/>';},"bSortable": false,"bSearchable": false,"sWidth" :"30px"}],
-						"bProcessing": true,
-						"bServerSide": true,
-						"sAjaxSource": "<?=base_url()?>index.php/realestate/updatedatareview",
-						"fnServerData": function ( sSource, aoData, fnCallback ) {
-							$.getJSON(sSource, aoData, function(json) {
-								$('#ck_all').attr('checked',false);
-								fnCallback(json);
-							});
-						}
+						"aoColumns": [{"bSortable": false,"bSearchable": false,"sWidth" :"40px"},
+									  {"bSortable": false,"bSearchable": false,"sWidth" :"30px"},
+									  {"sWidth" :"200px"},
+									  null,
+									  null,
+									  null,
+									  null,
+									  {"bSortable": false,"bSearchable": false,"sWidth" :"30px"}]
 					});
 		$('#ck_all').click(function() {
 			var checked_status = this.checked;
@@ -66,25 +57,8 @@
 				}
 			}
 		});
-		$('#accept_view').dialog({ buttons:[
-			    {text: "Có",click: function() { 
-			    						var aIDs = [];
-			    						$("input[name='a_id[]']:checked").each(function(){
-			    							aIDs.push($(this).val());
-			    						});
-			    						$('.re_ids').val(JSON.stringify(aIDs));
-			    						$('#accept_frm').submit();
-			    					} 
-			    },
-			    {text: "Không",click: function() { $(this).dialog("close"); } }
-			],
-			autoOpen: false,
-			modal: true,
-			resizable: false,
-			draggable: false
-		});
-		$('#reject_view').dialog({ buttons:[
-			    {text: "Có",click: function() { $('#reason_view').dialog('open');$(this).dialog("close");} },
+		$('#confirm_view').dialog({ buttons:[
+			    {text: "Có",click: function() { $('#re_frm').submit();} },
 			    {text: "Không",click: function() { $(this).dialog("close"); } }
 			],
 			autoOpen: false,
@@ -100,18 +74,16 @@
 			resizable: false,
 			draggable: false
 		});
-		$('#reason_view').dialog({ buttons:[
-			    {text: "Xác nhận",click: function() { 
-			    								var aIDs = [];
-					    						$("input[name='a_id[]']:checked").each(function(){
-					    							aIDs.push($(this).val());
-					    						});
-					    						$('.re_ids').val(JSON.stringify(aIDs));
-					    						$('#reason_field').val($('#reason').val());
-					    						$('#deny_frm').submit();
-			    							}
-			    },
-			    {text: "Hủy",click: function() { $(this).dialog("close"); } }
+		$('#notice_view_1').dialog({ buttons:[
+			    {text: "Đóng",click: function() { $(this).dialog("close"); } }
+			],
+			autoOpen: false,
+			modal: true,
+			resizable: false,
+			draggable: false
+		});
+		$('#notice_view_2').dialog({ buttons:[
+			    {text: "Đóng",click: function() { $(this).dialog("close"); } }
 			],
 			autoOpen: false,
 			modal: true,
@@ -119,7 +91,17 @@
 			draggable: false
 		});
 		
-		$('#accept_btn').click(function() {
+		$('#compare_btn').click(function(){
+			var count = $("input[name='a_id[]']:checked").length;
+			if (count < 2) {
+				$('#notice_view_1').dialog('open');
+			} else if (count > 2) {
+				$('#notice_view_2').dialog('open');
+			} else {
+				
+			}
+		});
+		$('#del_btn').click(function() {
 			var not_checked = true;
 			$("input[name='a_id[]']").each(function()
 			{
@@ -131,27 +113,8 @@
 			if (not_checked) {
 				$('#notice_view').dialog('open');
 			} else {
-				$('#accept_view').dialog('open');
+				$('#confirm_view').dialog('open');
 			}
-		});
-		$('#reject_btn').click(function() {
-			var not_checked = true;
-			$("input[name='a_id[]']").each(function()
-			{
-				if (this.checked) {
-					not_checked = false;
-					return not_checked;
-				}
-			});
-			if (not_checked) {
-				$('#notice_view').dialog('open');
-			} else {
-				$('#reject_view').dialog('open');
-			}
-		});
-		$('.edit_btn').live('click',function(e) {
-			window.open($(this).attr('href'),'Thông tin bất động sản',"resizable=1,width=1000,height=675");
-			e.preventDefault();
 		});
 		<?php if($this->session->flashdata('notice')):?>
 		$('#success_view').dialog({ buttons:[
@@ -166,25 +129,17 @@
 	</script>
 </head>
 <body>
-	<form action="<?=base_url()?>index.php/realestate/accept" method="post" id="accept_frm">
-		<input type="hidden" name="ids" class="re_ids"/>
-	</form>
-	<form action="<?=base_url()?>index.php/realestate/deny" method="post" id="deny_frm">
-		<input type="hidden" name="ids" class="re_ids"/>
-		<input type="hidden" name="reason" id="reason_field"/>
-	</form>
-	<div id="accept_view" title="Quản lý tin BĐS" style="display: none;">
-		<p>Bạn có chắc muốn đồng ý đăng (những) tin được chọn?</p>
-	</div>
-	<div id="reject_view" title="Quản lý tin BĐS" style="display: none;">
-		<p>Bạn có chắc muốn từ chối đăng (những) tin được chọn?</p>
+	<div id="confirm_view" title="Quản lý tin BĐS" style="display: none;">
+		<p>Bạn có chắc muốn xóa khỏi giỏ (những) tin được chọn?</p>
 	</div>
 	<div id="notice_view" title="Quản lý tin BĐS" style="display: none;">
 		<p>Không có tin nào được chọn!</p>
 	</div>
-	<div id="reason_view" title="Quản lý tin BĐS" style="display: none;">
-		<div><label>Lý do từ chối đăng tin:</label></div>
-		<textarea name="reason" id="reason" style="width: 265px;height: 175px;"></textarea>
+	<div id="notice_view_1" title="Quản lý tin BĐS" style="display: none;">
+		<p>Vui lòng chọn đủ 2 tin bất động sản!</p>
+	</div>
+	<div id="notice_view_2" title="Quản lý tin BĐS" style="display: none;">
+		<p>Chỉ được phép chọn 2 tin để thực hiện so sánh!</p>
 	</div>
 	<div id="success_view" title="Quản lý tin BĐS" style="display: none;">
 		<p><?=$this->session->flashdata('notice')?></p>
@@ -195,19 +150,20 @@
 			<div class="breadcrumbs">
 				<ul>
 					<li class="crumb-first"><a href="<?=base_url()?>index.php"><img src="<?=base_url()?>images/home.png" alt="Trang chủ" width="21"/></a></li>
-					<li class="crumb-sub"><a href="<?=base_url()?>index.php/realestate/manage">Quản lý tin BĐS</a></li>
-					<li class="crumb-last"><a href="#">Duyệt tin BĐS</a></li>
+					<li class="crumb-last"><a href="#">Giỏ tin</a></li>
 				</ul>
 			</div>
 			<div style="margin: 0 auto;width: 870px;">
-				<div class="btn_wrap" style="width:280px">
-					<button class="add_btn" id="accept_btn" style="float: left;"><img src="<?=base_url()?>images/check.gif" width="12"/>Chấp nhận đăng tin</button>
-					<button class="del_btn" id="reject_btn" style="float: right;"><img src="<?=base_url()?>images/cancel.gif" width="12"/>Từ chối đăng tin</button>
+				<div class="btn_wrap" style="width:210px">
+					<button class="add_btn" id="compare_btn" style="float: left;"><img src="<?=base_url()?>images/compare.png" width="15"/>So sánh</button>
+					<button class="del_btn" id="del_btn" style="float: right;"><img src="<?=base_url()?>images/trash.png" width="12"/>Bỏ khỏi giỏ tin</button>
 				</div>
 				<div class="table_wrap">
+					<form action="<?=base_url()?>index.php/cart/deleteitem" method="post" id="re_frm">
 					<table border="0" cellspacing="0" cellpadding="0" id="account_table" class="display">
 						<thead>
 							<tr>
+								<th class="fixed_column">STT</th>
 								<th class="fixed_column"><input type="checkbox" name="c_all" id="ck_all" /></th>
 								<th>Tiêu đề</th>
 								<th>Người đăng</th>
@@ -218,8 +174,22 @@
 							</tr>
 						</thead>
 						<tbody>
+							<?php $index = 1?>
+							<?php foreach($realEstates as $r):?>
+							<tr>
+								<td><?=$index++?></td>
+								<td><input type="checkbox" name="a_id[]" value="<?=$r['realestateid']?>"/></td>
+								<td><?=$r['title']?></td>
+								<td><?=$r['user']?></td>
+								<td><?=$r['date']?></td>
+								<td><?=$r['transaction']?></td>
+								<td><?=$r['category']?></td>
+								<td><a href="<?=base_url()?>index.php/realestate/index/<?=$r['realestateid']?>" class="edit_btn"><img src="<?=base_url()?>images/view_detail.png" height="24" width="24" title="Chi tiết tin BĐS"/></td>
+							</tr>
+							<?php endforeach;?>
 						</tbody>
 					</table>
+					</form>
 				</div>
 			</div>
 		</div>

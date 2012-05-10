@@ -147,8 +147,14 @@ class RealEstate_Model extends CI_Model{
      * Parameter 2:
      * Return:
      */
-    function GetItemByCart($lstRealEstateID){
-        
+    function GetItemByCart($aRealEstateIds){
+    	$this->db->select('realestateid, title, date, transaction, c.name as category, u.name as user');
+    	$this->db->from('realestate r');
+    	$this->db->join('user u', 'u.userid = r.userid');
+		$this->db->join('category c', 'c.categoryid = r.categoryid','left');
+        $this->db->where_in('realestateid',$aRealEstateIds);
+		
+		return $this->db->get()->result_array();
     }
     
     /*
