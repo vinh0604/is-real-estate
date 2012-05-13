@@ -10,6 +10,7 @@
 		</li>
 		<li class="top-menu-item"><a href="<?=base_url()?>index.php/search">Tìm kiếm</a></li>
 		<li class="top-menu-item"><a href="<?=base_url()?>index.php">Liên hệ</a></li>
+                <?php if (array_key_exists('user_id', $userdata)):?>
 		<li class="top-menu-item dropdown">
 			<a href="">Quản lý</a>
 			<ul class="sub-menu">
@@ -20,6 +21,7 @@
 				<?php endif;?>
 			</ul>
 		</li>
+                <?php endif;?>
 	</ul>
 	<span id="top-right-area">
 		<a href="<?=base_url()?>index.php/cart" class="cart_btn">

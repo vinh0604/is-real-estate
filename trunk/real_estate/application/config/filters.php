@@ -14,12 +14,12 @@
 |
 */
 $filter['authenticate'] = array(
-	'include', array('realestate/index,addnewitem,updateitem,deleteitem,accept,deny,deleteitem,getdetailforreview,sendreviewemail',
+	'include', array('realestate/addnewitem,updateitem,deleteitem,accept,deny,getdetailforreview,sendreviewemail,manage,updatedatatable,create,complete,edit,review,updatedatareview',
 					 'user/*',
 					 'imageupload/*')
 );
 $filter['authorize'] = array(
-	'include', array('realestate/accept,deny,getdetailforreview,sendreviewemail',
+	'include', array('realestate/accept,deny,getdetailforreview,sendreviewemail,review,updatedatareview',
 	  				 'user/addnewuser,deleteuser')
 );
 ?>

@@ -33,7 +33,12 @@
 			<div class="form-title">
 				Đăng nhập
 			</div>
-			<form action="<?=base_url()?>index.php/login/login" method="post" id="signin_frm">
+			<?php if ($this->session->flashdata('error')):?>
+			<div class="error" style="text-align: center;">
+				<?=$this->session->flashdata('error')?>
+			</div>
+			<?php endif;?>
+			<form action="<?=base_url()?>index.php/login/submitlogin" method="post" id="signin_frm">
 				<table>
 					<tr>
 						<td class="label_holder"><label for="username">Tên đăng nhập:</label></td>
