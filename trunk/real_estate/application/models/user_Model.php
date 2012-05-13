@@ -209,6 +209,44 @@ class User_Model extends CI_Model {
 		}
 		return FALSE;
     }
+	
+	/*
+     * Author: VinhBSD
+     * Summary: get users' email by real estate id
+     * Parameter 1: user id
+     * Return: user object if user exists, else return NULL
+     */
+    
+    function GetUserIDByEmail($email) {
+    	$sQuery = 'SELECT userid
+    			   FROM "user"
+    			   WHERE email = ?';
+		$query = $this->db->query($sQuery,array($email));
+		if ($query->num_rows()) {
+			return $query->row(0)->userid;
+		}
+		return FALSE;
+    }
+	
+	/*
+     * Author: VinhBSD
+     * Summary: get users' email by real estate id
+     * Parameter 1: user id
+     * Return: user object if user exists, else return NULL
+     */
+    
+    function GenerateRandomPassword($userId) {
+    	$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		$password =  substr( str_shuffle( $chars ), 0, 9 );
+		
+		$this->db->where('userid', $userId);
+		$this->db->update('"user"',array('password'=>$password));
+		
+		if ( $this->db->affected_rows()) {
+			return $password;
+		}
+		return FALSE;
+    }
 }
 
 ?>

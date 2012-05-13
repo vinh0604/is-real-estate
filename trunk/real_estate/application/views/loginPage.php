@@ -58,7 +58,7 @@
 					<tr>
 						<td colspan="2" style="text-align: right;">
 							<input type="submit" class="submit_btn" value="Đăng nhập"/>
-							<a href="#">Quên mật khẩu?</a>
+							<a href="<?=base_url()?>index.php/login/forgetpass">Quên mật khẩu?</a>
 						</td>
 					</tr>
 				</table>
