@@ -89,6 +89,28 @@ class Cart extends CI_Controller {
 		}
 		redirect(base_url('index.php/cart/'));
 	}
+	
+	/*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+	
+	function Compare($realEstateIdA, $realEstateIdB) {
+		$data['userdata'] = $this->session->userdata;
+		
+		$this->load->model('realEstate_Model');
+		$data['realEstateA'] = $this->realEstate_Model->FindByID($realEstateIdA);
+		$data['realEstateB'] = $this->realEstate_Model->FindByID($realEstateIdB);
+		if ($data['realEstateA'] && $data['realEstateB']) {
+			$this->load->helper('utils');
+			$this->load->view('comparePage',$data);
+		} else {
+			show_error('Không tìm thấy tin bất động sản yêu cầu!');
+		}
+	}
 
 }
 
