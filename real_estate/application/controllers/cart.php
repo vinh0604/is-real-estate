@@ -65,6 +65,30 @@ class Cart extends CI_Controller {
 		}
 		$this->output->set_output('');
 	}
+	
+	/*
+     * Author:
+     * Summary: 
+     * Parameter 1:
+     * Parameter 2:
+     * Return:
+     */
+	
+	function DeleteItem() {
+		if ($this->session->userdata('cart') && $this->input->post('a_id')) {
+			$cart = $this->session->userdata('cart');
+			$realEstateIds = $this->input->post('a_id');
+			foreach($realEstateIds as $realEstateId) {
+				$key = array_search($realEstateId, $cart);
+				if($key!==FALSE) {
+					unset($cart[$key]);
+				}
+			}
+			$this->session->set_userdata('cart',$cart);
+			$this->session->set_flashdata('notice','Thao tác xóa tin khỏi giỏ thực hiện thành công!');
+		}
+		redirect(base_url('index.php/cart/'));
+	}
 
 }
 

@@ -5,6 +5,8 @@
  * and open the template in the editor.
  */
 
+define("ADMIN", 'Quản trị');
+
 class User_Model extends CI_Model {
 
     function __construct() {
@@ -189,6 +191,24 @@ class User_Model extends CI_Model {
 		
 		return $this->db->get()->result_array();
      }
+	 
+	 /*
+     * Author: VinhBSD
+     * Summary: get users' email by real estate id
+     * Parameter 1: user id
+     * Return: user object if user exists, else return NULL
+     */
+    
+    function GetUserForLogin($username, $password) {
+    	$sQuery = 'SELECT userid, (CASE duty WHEN ? THEN true ELSE false END) as is_admin
+    			   FROM "user"
+    			   WHERE username = ? AND password = ?';
+		$query = $this->db->query($sQuery,array(ADMIN,$username,$password));
+		if ($query->num_rows()) {
+			return $query->row_array(0);
+		}
+		return FALSE;
+    }
 }
 
 ?>
