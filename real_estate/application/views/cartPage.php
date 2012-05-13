@@ -98,7 +98,12 @@
 			} else if (count > 2) {
 				$('#notice_view_2').dialog('open');
 			} else {
-				
+				var url = '<?=base_url()?>index.php/cart/compare';
+				$("input[name='a_id[]']:checked").each(function()
+				{
+					url += '/' + $(this).val();
+				});
+				window.open(url,'So sánh bất động sản',"resizable=1,width=900,height=375");
 			}
 		});
 		$('#del_btn').click(function() {
