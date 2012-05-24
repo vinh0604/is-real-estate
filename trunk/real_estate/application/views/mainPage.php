@@ -217,7 +217,7 @@
 	<div class="container">
 		<div class="left-container span-16">
 			<div id="search-area" class="main-area span-16">
-				<form id="search_frm" method="get" action="<?=base_url()?>index.php/search/basicsearch">
+				<form id="search_frm" method="get" action="<?=base_url()?>index.php/search">
 					<table>
 						<tr>
 							<td colspan="2" style="width: 70%"><input type="text" name="k" id="keyword" placeholder="Nhập từ khóa..."/></td>
