@@ -25,6 +25,9 @@
             //Chế độ tương tác bản đồ
             var Mode = 0;
             var Load = 0;
+            var keyword;
+            var cityid;
+            var districtid;
             function pageselectCallback(index,jq){
                 if (index != 0)
                     if (area==1)
@@ -62,6 +65,40 @@
                         $('#district').html(htmlDistrict.join(''));
                     });
                 });
+                
+                $.urlParam = function(name){
+                    var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
+                    return results[1] || 0;
+                }
+ 
+                
+                keyword = decodeURIComponent($.urlParam('k'));
+                cityid= $.urlParam('city');
+                districtid = $.urlParam('district');
+                if (keyword!=0){
+                    while (keyword.indexOf('+') != -1)
+                    keyword =  keyword.replace("+"," ");
+                    $("#keyword").val(keyword);
+                }
+                if (cityid!=0){
+                    $("#city option[value="+cityid+"]").attr('selected',true);
+                    $.getJSON('<?= base_url() ?>index.php/realestate/getdistrictbycityid',
+                    {id: cityid},
+                    function(districts) {
+                        var htmlDistrict = ['<option value="">Quận/ Huyện</option>'];
+                        console.log(districts);
+                        for(i in districts) {
+                            htmlDistrict.push(''.concat('<option value="',districts[i].districtid,'">',districts[i].name,'</option>'));
+                        }
+                        $('#district').html(htmlDistrict.join(''));
+                        if (districtid!=0){
+                            //alert(districtid);
+                            $("#district option[value="+districtid+"]").attr('selected',true);
+                        }
+                    });
+                }
+                
+
             })
         
             function addEvent(marker,realestateid) {
@@ -181,6 +218,13 @@
             }
             
             function UpdateMap(limit,offset,updatePage){
+                if (keyword != 0 || districtid != 0 || cityid != 0){
+                    BasicSearch(10, 0, true);
+                    keyword=0;
+                    districtid=0;
+                    cityid=0;
+                    return;
+                }
                 ChangeMode();
                 if (Mode == 0 && Load==0 )
                     return ;
@@ -219,6 +263,7 @@
         </script>
     </head>
     <body>
+
         <?= $topBar ?>
         <div class="container">
             <div class="span-24 search-area-wrap">
