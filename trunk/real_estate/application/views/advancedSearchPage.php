@@ -185,6 +185,7 @@
             
             
     function AdvancedSearch(limit,offset,updatePage){
+	Mode=0;
         $('#MapMode').attr("checked", false);
         if (!CheckPrice())
             return;
