@@ -184,6 +184,7 @@
             function BasicSearch(limit,offset,updatePage){
                 $('#MapMode').attr("checked", false);
                 area=1;
+                Mode=0;
                 $("#resultList").html("Đang tải dữ liệu...");
                 if (aMarker) {
                     for (var i = 0; i < aMarker.length; i++ ) {
