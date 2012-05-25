@@ -11,11 +11,13 @@
         <link rel="stylesheet" href="<?= base_url() ?>css/style.css" type="text/css" media="screen"/>
         <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
         <link rel="stylesheet" href="<?= base_url() ?>css/pagination.css" type="text/css" media="screen"/>
-
+        <link rel="stylesheet" href="<?= base_url() ?>css/jqdialog.css" type="text/css" media="screen"/>
         <script src="<?= base_url() ?>js/jquery-1.7.1.min.js" type="text/javascript"></script>
         <script src="<?= base_url() ?>js/common.js" type="text/javascript"></script>
         <script src="<?= base_url() ?>js/GeoJSON.js" type="text/javascript"></script>
         <script src="<?= base_url() ?>js/jquery.pagination.js" type="text/javascript"></script>
+        <script src="<?= base_url() ?>js/jquery.cart.js" type="text/javascript"></script>
+        <script src="<?= base_url() ?>js/jqdialog.min.js" type="text/javascript"></script>
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDS5bb-pXbt4N27kkA9y1AS0nGxgciqTiU&sensor=true&language=vi"></script>
         <script type="text/javascript" charset="utf-8">
             var map;
@@ -66,39 +68,41 @@
                     });
                 });
                 
-                $.urlParam = function(name){
-                    var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
-                    return results[1] || 0;
-                }
+                if (window.location.href.indexOf('%') != -1){
+                    $.urlParam = function(name){
+                        var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
+                        return results[1] || 0;
+                    }
  
                 
-                keyword = decodeURIComponent($.urlParam('k'));
-                cityid= $.urlParam('city');
-                districtid = $.urlParam('district');
-                if (keyword!=0){
-                    while (keyword.indexOf('+') != -1)
-                    keyword =  keyword.replace("+"," ");
-                    $("#keyword").val(keyword);
-                }
-                if (cityid!=0){
-                    $("#city option[value="+cityid+"]").attr('selected',true);
-                    $.getJSON('<?= base_url() ?>index.php/realestate/getdistrictbycityid',
-                    {id: cityid},
-                    function(districts) {
-                        var htmlDistrict = ['<option value="">Quận/ Huyện</option>'];
-                        console.log(districts);
-                        for(i in districts) {
-                            htmlDistrict.push(''.concat('<option value="',districts[i].districtid,'">',districts[i].name,'</option>'));
-                        }
-                        $('#district').html(htmlDistrict.join(''));
-                        if (districtid!=0){
-                            //alert(districtid);
-                            $("#district option[value="+districtid+"]").attr('selected',true);
-                        }
-                    });
+                    keyword = decodeURIComponent($.urlParam('k'));
+                    cityid= $.urlParam('city');
+                    districtid = $.urlParam('district');
+                    if (keyword!=0){
+                        while (keyword.indexOf('+') != -1)
+                            keyword =  keyword.replace("+"," ");
+                        $("#keyword").val(keyword);
+                    }
+                    if (cityid!=0){
+                        $("#city option[value="+cityid+"]").attr('selected',true);
+                        $.getJSON('<?= base_url() ?>index.php/realestate/getdistrictbycityid',
+                        {id: cityid},
+                        function(districts) {
+                            var htmlDistrict = ['<option value="">Quận/ Huyện</option>'];
+                            console.log(districts);
+                            for(i in districts) {
+                                htmlDistrict.push(''.concat('<option value="',districts[i].districtid,'">',districts[i].name,'</option>'));
+                            }
+                            $('#district').html(htmlDistrict.join(''));
+                            if (districtid!=0){
+                                //alert(districtid);
+                                $("#district option[value="+districtid+"]").attr('selected',true);
+                            }
+                        });
+                    }
                 }
                 
-
+                $('.add_cart').spCart('<?= base_url() ?>index.php/cart/add');
             })
         
             function addEvent(marker,realestateid) {
@@ -129,7 +133,7 @@
                     '<div><b>Loại BĐS: </b>',realEstate.category,'</div>',
                     '<div><b>Giá: </b> ',price,'</div>',
                     '<div><b>Điện thoại: </b>',realEstate.contacttel,'</div>',
-                    '<div style="width: 100%; margin-top: 10px;">',direction_url,cart_url,'</div>',
+                    '<div style="width: 100%; margin-top: 10px;">',cart_url,'</div>',
                     '</div>'));
                     infoWindow.open(map,marker);
                 });
