@@ -20,6 +20,6 @@ $filter['authenticate'] = array(
 );
 $filter['authorize'] = array(
 	'include', array('realestate/accept,deny,getdetailforreview,sendreviewemail,review,updatedatareview',
-	  				 'user/addnewuser,deleteuser')
+	  				 'user/index,addnewuser,deleteuser,updateuser')
 );
 ?>

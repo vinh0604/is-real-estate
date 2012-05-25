@@ -37,7 +37,7 @@
 		<ul class="login_signup_wrap">
 			<?php if (array_key_exists('user_id',$userdata) && $userdata['user_id']): ?>
 			<li class="blue_btn" style="float: left">
-				<a href="<?=base_url()?>index.php/user" class="left_btn">Tài khoản</a>
+				<a href="<?=base_url()?>index.php/user/change" class="left_btn">Tài khoản</a>
 			</li>
 			<li class="blue_btn">
 				<a href="<?=base_url()?>index.php/logout" class="right_btn">Đăng xuất
