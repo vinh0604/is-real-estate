@@ -51,7 +51,7 @@ class User extends CI_Controller {
     function AddNewUser() {
         $account = array
             ("username" => $this->input->post("username"),
-            "password" => md5($this->input->post("username")),
+            "password" => ($this->input->post("username")),
             "email" => $this->input->post("email"),
             "name" => $this->input->post("fullname"),
             "tel" => $this->input->post("phone"),
@@ -139,9 +139,9 @@ class User extends CI_Controller {
      */
 
     function CheckOldPassword() {
-        $userID = 2;
+        $userID = $this->session->userdata('user_id');
         $this->load->model('User_Model');
-        $oldPassword = md5($this->input->post("oldPassword"));
+        $oldPassword = ($this->input->post("oldPassword"));
         echo $this->User_Model->CheckOldPassword($userID, $oldPassword);
     }
 
@@ -152,7 +152,7 @@ class User extends CI_Controller {
      */
 
     function ChangePassword() {
-        $userID = 2;
+        $userID = $this->session->userdata('user_id');
         $this->load->model('User_Model');
         $newPassword = md5($this->input->post("newPassword"));
         echo $this->User_Model->ChangePassword($userID, $newPassword);
