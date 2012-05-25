@@ -15,6 +15,11 @@
         <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
         <link rel="stylesheet" href="<?= base_url() ?>css/pagination.css" type="text/css" media="screen"/>
         <link rel="stylesheet" href="<?= base_url() ?>css/redmond/jquery-ui-1.8.18.custom.css" type="text/css" media="screen"/>
+        <style type="text/css" media="screen">
+            #search_caption {
+            	cursor: pointer;
+            }
+        </style>
         <script type="text/javascript"
                 src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDS5bb-pXbt4N27kkA9y1AS0nGxgciqTiU&sensor=true&language=vi">
         </script>
@@ -75,6 +80,9 @@
                         }
                         $('#district').html(htmlDistrict.join(''));
                     });
+                });
+                $('#search_caption').click(function(){
+                	$('#search_frm').toggle();
                 });
                 $('#street_name').autocompleteArray(
 <?php
@@ -365,7 +373,7 @@ echo "]";
         <div class="container">
             <div class="span-24 search-area-wrap">
                 <div class="module-wrap advance-search-wrap">
-                    <div class="caption-area">
+                    <div class="caption-area" id="search_caption">
                         Tìm kiếm nâng cao
                     </div>
                     <form action="<?= base_url() ?>index.php/search/advanced" method="post" id="search_frm">
