@@ -10,7 +10,8 @@
         <link rel="stylesheet" href="<?= base_url() ?>css/blueprint/print.css" type="text/css" media="print"/>
         <link rel="stylesheet" href="<?= base_url() ?>css/style.css" type="text/css" media="screen"/>
         <link rel="stylesheet" href="<?= base_url() ?>css/jquery.autocomplete.css" type="text/css" media="screen"/>
-        
+        <link rel="stylesheet" href="<?= base_url() ?>css/jqdialog.css" type="text/css" media="screen"/>
+
         <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
         <link rel="stylesheet" href="<?= base_url() ?>css/pagination.css" type="text/css" media="screen"/>
         <link rel="stylesheet" href="<?= base_url() ?>css/redmond/jquery-ui-1.8.18.custom.css" type="text/css" media="screen"/>
@@ -22,7 +23,9 @@
         <script src="<?= base_url() ?>js/jquery-ui-1.8.18.custom.min.js" type="text/javascript"></script>
         <script src="<?= base_url() ?>js/jquery.pagination.js" type="text/javascript"></script>
         <script src="<?= base_url() ?>js/jquery.autocomplete.js" type="text/javascript"></script>
-
+        <script src="<?= base_url() ?>js/common.js" type="text/javascript"></script>
+        <script src="<?= base_url() ?>js/jquery.cart.js" type="text/javascript"></script>
+        <script src="<?= base_url() ?>js/jqdialog.min.js" type="text/javascript"></script>
         <script type="text/javascript" charset="utf-8">
             var map;
             var aMarker = [];
@@ -58,7 +61,8 @@
                 google.maps.event.addListener(map, 'zoom_changed', function() {UpdateMap(10,0,true);});
                 google.maps.event.addListener(map, 'dragend', function() {UpdateMap(10,0,true);});
                 google.maps.event.addDomListener(window, 'load', function() {Load=1; UpdateMap(10,0,true); Load=0;});
-                                              
+                               
+                $('.add_cart').spCart('<?= base_url() ?>index.php/cart/add');               
                 $('#city').change(function(){
                     $.getJSON('<?= base_url() ?>index.php/realestate/getdistrictbycityid',
                     {id: $('#city').val()},
@@ -72,281 +76,281 @@
                     });
                 });
                 $('#street_name').autocompleteArray(
-                <?php
-                echo "[";
-                foreach ($street as $st):
-                    echo "'$st->ten_dgt',";
-                endforeach;
-                echo "]";
-                ?>
-        ,
-        {
-            delay:10,
-            minChars:1,
-            matchSubset:1,
-            onItemSelect:selectItem,
-            onFindValue:findValue,
-            autoFill:true,
-            maxItemsToShow:10
-        } 
+<?php
+echo "[";
+foreach ($street as $st):
+    echo "'$st->ten_dgt',";
+endforeach;
+echo "]";
+?>
+                        ,
+                        {
+                            delay:10,
+                            minChars:1,
+                            matchSubset:1,
+                            onItemSelect:selectItem,
+                            onFindValue:findValue,
+                            autoFill:true,
+                            maxItemsToShow:10
+                        } 
                     
-    );
-    })
-    function findValue(li) {
-        //if( li == null ) return alert("No match!");
-        // if coming from an AJAX call, let's use the CityId as the value
-        if( !!li.extra ) var sValue = li.extra[0];
-        // otherwise, let's just display the value in the text box
-        else var sValue = li.selectValue;
-        //alert("The value you selected was: " + sValue);
-    }
-    function selectItem(li) {
-        findValue(li);
-    } 
+                    );
+                    })
+                    function findValue(li) {
+                        //if( li == null ) return alert("No match!");
+                        // if coming from an AJAX call, let's use the CityId as the value
+                        if( !!li.extra ) var sValue = li.extra[0];
+                        // otherwise, let's just display the value in the text box
+                        else var sValue = li.selectValue;
+                        //alert("The value you selected was: " + sValue);
+                    }
+                    function selectItem(li) {
+                        findValue(li);
+                    } 
         
-    function addEvent(marker,realestateid) {
-        google.maps.event.addListener(marker, 
-        'click', 
-        function(event){
-            showInfo(marker,realestateid);
-        });
-    }
-    function showInfo(marker,realEstateId) {
-        $.getJSON('<?= base_url() ?>index.php/home/getdetail',
-        {id: realEstateId},
-        function(realEstate) {
-            var url = '<?= base_url() ?>index.php/realestate/index/' + realEstate.realestateid;
-            var price = '';
-            if (parseFloat(realEstate.price)) {
-                price = price.concat('<span class="info_price">',formatPrice(realEstate.price),realEstate.currency,'</span>');
-                if (realEstate.unit) {
-                    price = price.concat(' / ',realEstate.unit);
-                }
-            }
-            var direction_url = ''.concat('<a href="#" class="direction_link" lat="',marker.getPosition().lat(),'" lng="',marker.getPosition().lng(),'" style="float: left">Tìm đường đến đây</a>');
-            var cart_url = ''.concat('<a href="#" class="add_cart" reid="',realEstate.realestateid,'" style="float: right">Thêm vào giỏ tin</a>');
-            infoWindow.setContent('<div class="info_window">'.concat(
-            '<div class="info_title"><a href="',url,'">',realEstate.title,'</a></div>', 
-            '<div><b>Địa chỉ: </b>',realEstate.address,'</div>',
-            '<div><b>Diện tích: </b>',realEstate.area,' m2','</div>',
-            '<div><b>Loại BĐS: </b>',realEstate.category,'</div>',
-            '<div><b>Giá: </b> ',price,'</div>',
-            '<div><b>Điện thoại: </b>',realEstate.contacttel,'</div>',
-            '<div style="width: 100%; margin-top: 10px;">',direction_url,cart_url,'</div>',
-            '</div>'));
-            infoWindow.open(map,marker);
-        });
-    }
+                    function addEvent(marker,realestateid) {
+                        google.maps.event.addListener(marker, 
+                        'click', 
+                        function(event){
+                            showInfo(marker,realestateid);
+                        });
+                    }
+                    function showInfo(marker,realEstateId) {
+                        $.getJSON('<?= base_url() ?>index.php/home/getdetail',
+                        {id: realEstateId},
+                        function(realEstate) {
+                            var url = '<?= base_url() ?>index.php/realestate/index/' + realEstate.realestateid;
+                            var price = '';
+                            if (parseFloat(realEstate.price)) {
+                                price = price.concat('<span class="info_price">',formatPrice(realEstate.price),realEstate.currency,'</span>');
+                                if (realEstate.unit) {
+                                    price = price.concat(' / ',realEstate.unit);
+                                }
+                            }
+                            var direction_url = ''.concat('<a href="#" class="direction_link" lat="',marker.getPosition().lat(),'" lng="',marker.getPosition().lng(),'" style="float: left">Tìm đường đến đây</a>');
+                            var cart_url = ''.concat('<a href="#" class="add_cart" reid="',realEstate.realestateid,'" style="float: right">Thêm vào giỏ tin</a>');
+                            infoWindow.setContent('<div class="info_window">'.concat(
+                            '<div class="info_title"><a href="',url,'">',realEstate.title,'</a></div>', 
+                            '<div><b>Địa chỉ: </b>',realEstate.address,'</div>',
+                            '<div><b>Diện tích: </b>',realEstate.area,' m2','</div>',
+                            '<div><b>Loại BĐS: </b>',realEstate.category,'</div>',
+                            '<div><b>Giá: </b> ',price,'</div>',
+                            '<div><b>Điện thoại: </b>',realEstate.contacttel,'</div>',
+                            '<div style="width: 100%; margin-top: 10px;">',cart_url,'</div>',
+                            '</div>'));
+                            infoWindow.open(map,marker);
+                        });
+                    }
             
             
-    function UpdateObjectOnMap(realEstate){
-        var icon = '<?= base_url() ?>images/house_sale.png';
-        var location = JSON.parse(realEstate.location);
-        if (realEstate.transaction.toLowerCase() == "thuê") {
-            icon = '<?= base_url() ?>images/house_lease.png';
-        }
-        var marker = new GeoJSON(location, {"icon": icon});
-        marker.setMap(map);
-        addEvent(marker,realEstate.realestateid);
-        aMarker.push(marker);
-    }
+                    function UpdateObjectOnMap(realEstate){
+                        var icon = '<?= base_url() ?>images/house_sale.png';
+                        var location = JSON.parse(realEstate.location);
+                        if (realEstate.transaction.toLowerCase() == "thuê") {
+                            icon = '<?= base_url() ?>images/house_lease.png';
+                        }
+                        var marker = new GeoJSON(location, {"icon": icon});
+                        marker.setMap(map);
+                        addEvent(marker,realEstate.realestateid);
+                        aMarker.push(marker);
+                    }
             
-    function UpdateList(realEstates,sumPages,updatePage){
-        if (realEstates.length == 0){
-            $("#resultList").html("Không có kết quả trùng khớp");
-            return;
-        }
+                    function UpdateList(realEstates,sumPages,updatePage){
+                        if (realEstates.length == 0){
+                            $("#resultList").html("Không có kết quả trùng khớp");
+                            return;
+                        }
                 
-        var count=0;
-        $("#resultList").html('');
-        for (i in realEstates)       {
-            var innerHTML="";
-            innerHTML+="<li><div class='news-wrap'><div class='left-news'>";
-            innerHTML+="<a href='#' onmouseover='ChangeIcon("+count+");' onmouseout='ResetIcon("+count+",\""+realEstates[i].transaction+"\");'";
-            innerHTML+='><img src="<?= base_url() ?>images/thumbnails/'+realEstates[i].realestateid+'/'+realEstates[i].url+'" alt="Hình địa ốc" width="64"/>';
-            innerHTML+='</a></div><div class="right-news"><div class="news-title">';
-            innerHTML+="<a href='<?= base_url() ?>index.php/realestate/index/"+realEstates[i].realestateid+"' onmouseover='ChangeIcon("+count+");' onmouseout='ResetIcon("+count+",\""+realEstates[i].transaction+"\");' >"+realEstates[i].title+'</a>';
-            innerHTML+='</div></div></div></li>';
-            $("#resultList").append(innerHTML);                        
-            count++;
-            UpdateObjectOnMap(realEstates[i]);
-        }
-        if (updatePage){
-            $('#pagination').pagination(sumPages, {callback: pageselectCallback, 
-                prev_text: '&lt',
-                next_text: '&gt',
-                num_display_entries: 3,
-                num_edge_entries: 1,
-                items_per_page: 10});
-        }
-        if (Mode==0)
-            map.panTo(aMarker[0].getPosition());
-    }
+                        var count=0;
+                        $("#resultList").html('');
+                        for (i in realEstates)       {
+                            var innerHTML="";
+                            innerHTML+="<li><div class='news-wrap'><div class='left-news'>";
+                            innerHTML+="<a href='#' onmouseover='ChangeIcon("+count+");' onmouseout='ResetIcon("+count+",\""+realEstates[i].transaction+"\");'";
+                            innerHTML+='><img src="<?= base_url() ?>images/thumbnails/'+realEstates[i].realestateid+'/'+realEstates[i].url+'" alt="Hình địa ốc" width="64"/>';
+                            innerHTML+='</a></div><div class="right-news"><div class="news-title">';
+                            innerHTML+="<a href='<?= base_url() ?>index.php/realestate/index/"+realEstates[i].realestateid+"' onmouseover='ChangeIcon("+count+");' onmouseout='ResetIcon("+count+",\""+realEstates[i].transaction+"\");' >"+realEstates[i].title+'</a>';
+                            innerHTML+='</div></div></div></li>';
+                            $("#resultList").append(innerHTML);                        
+                            count++;
+                            UpdateObjectOnMap(realEstates[i]);
+                        }
+                        if (updatePage){
+                            $('#pagination').pagination(sumPages, {callback: pageselectCallback, 
+                                prev_text: '&lt',
+                                next_text: '&gt',
+                                num_display_entries: 3,
+                                num_edge_entries: 1,
+                                items_per_page: 10});
+                        }
+                        if (Mode==0)
+                            map.panTo(aMarker[0].getPosition());
+                    }
             
             
-    function AdvancedSearch(limit,offset,updatePage){
-	Mode=0;
-        $('#MapMode').attr("checked", false);
-        if (!CheckPrice())
-            return;
-        area=1;
-        $("#resultList").html("Đang tải dữ liệu...");
-        if (aMarker) {
-            for (var i = 0; i < aMarker.length; i++ ) {
-                aMarker[i].setMap(null);
-            }
-        }
-        aMarker=[];
-        $.getJSON("<?php echo base_url() ?>index.php/search/Advancedsearch",
-        { keyword: $("#keyword").val(),
-            cityID: $("#city").val(),
-            districtID: $("#district").val(),
-            categoryID: $("#category").val(),
-            transaction: $("#transaction").val(),
-            direction: $('#direction').val(),
-            area: $('#area').val(),
-            startPrice : price1,
-            endPrice : price2,
-            currency: $('#currency').val(),
-            hospitalDis : $('#hospital_distance').val(),
-            schoolDis : $('#school_distance').val(),
-            marketDis : $('#market_distance').val(),
-            streetDis : $('#street_distance').val(),
-            streetName : $('#street_name').val(),
-            limit : limit,
-            offset : offset},
-        function (realEstates){
-            UpdateList(realEstates["items"],realEstates['count'],updatePage);
-        }
+                    function AdvancedSearch(limit,offset,updatePage){
+                        Mode=0;
+                        $('#MapMode').attr("checked", false);
+                        if (!CheckPrice())
+                            return;
+                        area=1;
+                        $("#resultList").html("Đang tải dữ liệu...");
+                        if (aMarker) {
+                            for (var i = 0; i < aMarker.length; i++ ) {
+                                aMarker[i].setMap(null);
+                            }
+                        }
+                        aMarker=[];
+                        $.getJSON("<?php echo base_url() ?>index.php/search/Advancedsearch",
+                        { keyword: $("#keyword").val(),
+                            cityID: $("#city").val(),
+                            districtID: $("#district").val(),
+                            categoryID: $("#category").val(),
+                            transaction: $("#transaction").val(),
+                            direction: $('#direction').val(),
+                            area: $('#area').val(),
+                            startPrice : price1,
+                            endPrice : price2,
+                            currency: $('#currency').val(),
+                            hospitalDis : $('#hospital_distance').val(),
+                            schoolDis : $('#school_distance').val(),
+                            marketDis : $('#market_distance').val(),
+                            streetDis : $('#street_distance').val(),
+                            streetName : $('#street_name').val(),
+                            limit : limit,
+                            offset : offset},
+                        function (realEstates){
+                            UpdateList(realEstates["items"],realEstates['count'],updatePage);
+                        }
                 
-    );
-    }
-    function ChangeIcon(i){
-        aMarker[i].setIcon('<?= base_url() ?>images/map1.png');
-        if (Mode == 0)
-            map.panTo(aMarker[i].getPosition());
-    }
-    function ResetIcon(i,transaction){
-        if (transaction.toLowerCase() == "thuê")
-            aMarker[i].setIcon('<?= base_url() ?>images/house_lease.png');
-        else
-            aMarker[i].setIcon('<?= base_url() ?>images/house_sale.png');
-    }
+                    );
+                    }
+                    function ChangeIcon(i){
+                        aMarker[i].setIcon('<?= base_url() ?>images/map1.png');
+                        if (Mode == 0)
+                            map.panTo(aMarker[i].getPosition());
+                    }
+                    function ResetIcon(i,transaction){
+                        if (transaction.toLowerCase() == "thuê")
+                            aMarker[i].setIcon('<?= base_url() ?>images/house_lease.png');
+                        else
+                            aMarker[i].setIcon('<?= base_url() ?>images/house_sale.png');
+                    }
             
-    function UpdateMap(limit,offset,updatePage){
-        ChangeMode();
-        if (Mode == 0 && Load==0 )
-            return ;
-        area=0;
-        $("#resultList").html("Đang tải dữ liệu...");
-        if (aMarker) {
-            for (var i = 0; i < aMarker.length; i++ ) {
-                aMarker[i].setMap(null);
-            }
-        }
-        aMarker=[];
-        $.getJSON("<?php echo base_url() ?>index.php/search/GetAllForMapAdvancedSearch",
-        { keyword: $("#keyword").val(),
-            cityID: $("#city").val(),
-            districtID: $("#district").val(),
-            categoryID: $("#category").val(),
-            transaction: $("#transaction").val(),
-            direction: $('#direction').val(),
-            area: $('#area').val(),
-            startPrice : price1,
-            endPrice : price2,
-            currency: $('#currency').val(),
-            hospitalDis : $('#hospital_distance').val(),
-            schoolDis : $('#school_distance').val(),
-            marketDis : $('#market_distance').val(),
-            streetDis : $('#street_distance').val(),
-            streetName : $('#street_name').val(),
-            northEastlat:map.getBounds().getNorthEast().lat(),
-            northEastlng:map.getBounds().getNorthEast().lng(),
-            southWestlat:map.getBounds().getSouthWest().lat(),
-            southWestlng:map.getBounds().getSouthWest().lng(),
-            limit : limit,
-            offset : offset},
-        function (realEstates){
-            UpdateList(realEstates["items"],realEstates['count'],updatePage);
-        }
-    );
-    }
+                    function UpdateMap(limit,offset,updatePage){
+                        ChangeMode();
+                        if (Mode == 0 && Load==0 )
+                            return ;
+                        area=0;
+                        $("#resultList").html("Đang tải dữ liệu...");
+                        if (aMarker) {
+                            for (var i = 0; i < aMarker.length; i++ ) {
+                                aMarker[i].setMap(null);
+                            }
+                        }
+                        aMarker=[];
+                        $.getJSON("<?php echo base_url() ?>index.php/search/GetAllForMapAdvancedSearch",
+                        { keyword: $("#keyword").val(),
+                            cityID: $("#city").val(),
+                            districtID: $("#district").val(),
+                            categoryID: $("#category").val(),
+                            transaction: $("#transaction").val(),
+                            direction: $('#direction').val(),
+                            area: $('#area').val(),
+                            startPrice : price1,
+                            endPrice : price2,
+                            currency: $('#currency').val(),
+                            hospitalDis : $('#hospital_distance').val(),
+                            schoolDis : $('#school_distance').val(),
+                            marketDis : $('#market_distance').val(),
+                            streetDis : $('#street_distance').val(),
+                            streetName : $('#street_name').val(),
+                            northEastlat:map.getBounds().getNorthEast().lat(),
+                            northEastlng:map.getBounds().getNorthEast().lng(),
+                            southWestlat:map.getBounds().getSouthWest().lat(),
+                            southWestlng:map.getBounds().getSouthWest().lng(),
+                            limit : limit,
+                            offset : offset},
+                        function (realEstates){
+                            UpdateList(realEstates["items"],realEstates['count'],updatePage);
+                        }
+                    );
+                    }
         
-    function ChangeMode(){
-        if ($('#MapMode').is(':checked'))
-            Mode=1;
-        else
-            Mode =0;
-    }
+                    function ChangeMode(){
+                        if ($('#MapMode').is(':checked'))
+                            Mode=1;
+                        else
+                            Mode =0;
+                    }
             
-    function ShowMessage(content){
-        $('#message').html(content);
-        $('#dialog').dialog({ modal: true,buttons: [
-                {
-                    text: "OK",
-                    click: function() { $(this).dialog("close"); }
-                }
-            ]});
-    }
+                    function ShowMessage(content){
+                        $('#message').html(content);
+                        $('#dialog').dialog({ modal: true,buttons: [
+                                {
+                                    text: "OK",
+                                    click: function() { $(this).dialog("close"); }
+                                }
+                            ]});
+                    }
             
             
-    var price1;
-    var price2;
-    function CheckPrice(){
-        var str = "";
+                    var price1;
+                    var price2;
+                    function CheckPrice(){
+                        var str = "";
                 
-        if (isNaN($('#start_price').val())){
-            str+='Giá 1 nhập sai <br />';
-        }
-        if (isNaN($('#hospital_distance').val()) || (parseFloat($('#hospital_distance').val()) < 0)){
-            str+='Khoảng cách bệnh viện nhập sai <br />';
-        }
-        if (isNaN($('#market_distance').val()) || (parseFloat($('#market_distance').val()) < 0)){
-            str+='Khoảng cách chợ,siêu thị nhập sai <br />';
-        }
-        if (isNaN($('#school_distance').val()) || (parseFloat($('#school_distance').val()) < 0)){
-            str+='Khoảng cách trường học nhập sai <br />';
-        }
-        if (isNaN($('#street_distance').val()) || (parseFloat($('#street_distance').val()) < 0)){
-            str+='Khoảng cách đường nhập sai <br />';
-        }
+                        if (isNaN($('#start_price').val())){
+                            str+='Giá 1 nhập sai <br />';
+                        }
+                        if (isNaN($('#hospital_distance').val()) || (parseFloat($('#hospital_distance').val()) < 0)){
+                            str+='Khoảng cách bệnh viện nhập sai <br />';
+                        }
+                        if (isNaN($('#market_distance').val()) || (parseFloat($('#market_distance').val()) < 0)){
+                            str+='Khoảng cách chợ,siêu thị nhập sai <br />';
+                        }
+                        if (isNaN($('#school_distance').val()) || (parseFloat($('#school_distance').val()) < 0)){
+                            str+='Khoảng cách trường học nhập sai <br />';
+                        }
+                        if (isNaN($('#street_distance').val()) || (parseFloat($('#street_distance').val()) < 0)){
+                            str+='Khoảng cách đường nhập sai <br />';
+                        }
                 
-        if ($('#street_name').val() == "" && $('#street_distance').val() != ""){
-            str+='Thiếu tên đường <br />';
-        }
+                        if ($('#street_name').val() == "" && $('#street_distance').val() != ""){
+                            str+='Thiếu tên đường <br />';
+                        }
                     
-        if ($('#street_name').val() != "" && $('#street_distance').val() == ""){
-            str+='Thiếu khoảng cách đến đường <br />';    
-        }
+                        if ($('#street_name').val() != "" && $('#street_distance').val() == ""){
+                            str+='Thiếu khoảng cách đến đường <br />';    
+                        }
                 
-        var p = $('#price').val();
-        var min = parseFloat($('#start_price').val());
-        var max = parseFloat($('#end_price').val());
-        if (min > max){
-            str+='Khoảng giá không phù hợp';
-        }
+                        var p = $('#price').val();
+                        var min = parseFloat($('#start_price').val());
+                        var max = parseFloat($('#end_price').val());
+                        if (min > max){
+                            str+='Khoảng giá không phù hợp';
+                        }
                 
-        if (str!=""){					
-            ShowMessage(str);
-            return false;
-        }
-        if ($('#currency').val() == 'VND'){
-            if ($('#start_price').val() != "" ) price1 = parseFloat($('#start_price').val())*100000;
-            else price1 ="";
-            if ($('#end_price').val() != "" )
-                price2 = parseFloat($('#end_price').val())*1000000;
-            else price2="";
-        }
-        else{
-            if ($('#start_price').val() != "" ) price1 = parseFloat($('#start_price').val());
-            else price1 ="";
-            if ($('#end_price').val() != "" )
-                price2 = parseFloat($('#end_price').val());
-            else price2="";
-        }
-        return true;
-    }
+                        if (str!=""){					
+                            ShowMessage(str);
+                            return false;
+                        }
+                        if ($('#currency').val() == 'VND'){
+                            if ($('#start_price').val() != "" ) price1 = parseFloat($('#start_price').val())*100000;
+                            else price1 ="";
+                            if ($('#end_price').val() != "" )
+                                price2 = parseFloat($('#end_price').val())*1000000;
+                            else price2="";
+                        }
+                        else{
+                            if ($('#start_price').val() != "" ) price1 = parseFloat($('#start_price').val());
+                            else price1 ="";
+                            if ($('#end_price').val() != "" )
+                                price2 = parseFloat($('#end_price').val());
+                            else price2="";
+                        }
+                        return true;
+                    }
             
         </script>
 
