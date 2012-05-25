@@ -19,6 +19,7 @@
                 src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDS5bb-pXbt4N27kkA9y1AS0nGxgciqTiU&sensor=true&language=vi">
         </script>
         <script src="<?= base_url() ?>js/GeoJSON.js" type="text/javascript"></script>
+        <script src="<?= base_url() ?>js/common.js" type="text/javascript"></script>
         <script src="<?= base_url() ?>js/jquery-1.7.1.min.js" type="text/javascript"></script>
         <script src="<?= base_url() ?>js/jquery-ui-1.8.18.custom.min.js" type="text/javascript"></script>
         <script src="<?= base_url() ?>js/jquery.pagination.js" type="text/javascript"></script>
