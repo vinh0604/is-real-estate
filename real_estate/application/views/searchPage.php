@@ -12,6 +12,11 @@
         <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
         <link rel="stylesheet" href="<?= base_url() ?>css/pagination.css" type="text/css" media="screen"/>
         <link rel="stylesheet" href="<?= base_url() ?>css/jqdialog.css" type="text/css" media="screen"/>
+        <style type="text/css" media="screen">
+            #search_caption {
+            	cursor: pointer;
+            }
+        </style>
         <script src="<?= base_url() ?>js/jquery-1.7.1.min.js" type="text/javascript"></script>
         <script src="<?= base_url() ?>js/common.js" type="text/javascript"></script>
         <script src="<?= base_url() ?>js/GeoJSON.js" type="text/javascript"></script>
@@ -101,7 +106,9 @@
                         });
                     }
                 }
-                
+                $('#search_caption').click(function(){
+                	$('#search_frm').toggle();
+                });
                 $('.add_cart').spCart('<?= base_url() ?>index.php/cart/add');
             })
         
@@ -274,7 +281,7 @@
             <div class="span-24 search-area-wrap">
                 <div class="left-side span-6">
                     <div class="search-frm-wrap module-wrap">
-                        <div class="caption-area">
+                        <div class="caption-area" id="search_caption">
                             Tìm kiếm bất động sản
                         </div>
                         <form action="#" method="get" id="search_frm">
