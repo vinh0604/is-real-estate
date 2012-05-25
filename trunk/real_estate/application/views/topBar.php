@@ -8,7 +8,13 @@
 				<li><a href="<?=base_url()?>index.php/realestate/view?trans=Thuê">Nhà đất cho thuê</a></li>
 			</ul>
 		</li>
-		<li class="top-menu-item"><a href="<?=base_url()?>index.php/search">Tìm kiếm</a></li>
+		<li class="top-menu-item dropdown">
+			<a href="<?=base_url()?>index.php/search">Tìm kiếm</a>
+			<ul class="sub-menu">
+				<li><a href="<?=base_url()?>index.php/search">Tìm kiếm cơ bản</a></li>
+				<li><a href="<?=base_url()?>index.php/search/advanced">Tìm kiếm nâng cao</a></li>
+			</ul>
+		</li>
 		<li class="top-menu-item"><a href="<?=base_url()?>index.php">Liên hệ</a></li>
                 <?php if (array_key_exists('user_id', $userdata)):?>
 		<li class="top-menu-item dropdown">

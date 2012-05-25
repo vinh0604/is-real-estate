@@ -119,7 +119,11 @@
       		$('#directionsPanel').hide();
       		$('#map_canvas').width(470);
 		});
+		<?php if ($realEstate['price']): ?>
 		var price = formatPrice('<?=$realEstate['price']?>') + ' ' + '<?=$realEstate['currency']?>';
+		<?php else: ?>
+		var price = '';
+		<?php endif; ?>
 		$('.price').text(price);
 	})
 	</script>
