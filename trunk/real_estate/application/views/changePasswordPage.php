@@ -74,8 +74,6 @@
                 <div class="form-title">
                     Thay đổi mật khẩu
                 </div>
-                <div id="message">
-                </div>
                 <div id="changepwd">
                     <form action="<?= base_url() ?>index.php/login/login" method="post" id="changepwd_frm">
                         <table>
