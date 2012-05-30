@@ -22,7 +22,10 @@ class Querybuilder {
         for ($i = 0; $i < count($aBuiltKeyword); $i++) {
             if ($strLikeQuery['query'] != "")
                 $strLikeQuery['query'].=" $type ";
-            $strLikeQuery['query'].="(lower(description) like lower ('" . '%' . $aBuiltKeyword[$i]['val'] . ' ' . $aBuiltKeyword[$i]['key'] . "%'))";
+            if (isset($aBuiltKeyword[$i]['val']))
+                $strLikeQuery['query'].="(lower(description) like lower ('" . '%' . $aBuiltKeyword[$i]['val'] . ' ' . $aBuiltKeyword[$i]['key'] . "%'))";
+            else
+                $strLikeQuery['query'].="(lower(description) like lower ('" . '%' . $aBuiltKeyword[$i]['key'] . "%'))";
         }
         $strLikeQuery['count'] = count($aBuiltKeyword);
         return $strLikeQuery;
