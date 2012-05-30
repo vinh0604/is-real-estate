@@ -28,7 +28,7 @@
 						"aaSorting": [[3,'desc']],
 						"aoColumns": [{"mDataProp" : function(row,eType) { return '<input type="checkbox" name="a_id[]" value="' + row.realestateid + '"/>';},"bSortable": false,"bSearchable": false,"sWidth" :"30px"},
 									  {"mDataProp" : "title","sWidth" :"200px"},
-									  {"mDataProp" : function(row,eType) {return '<a href="<?=base_url()?>index.php/user/' + row.userid + '">' + row.username + '</a>';}},
+									  {"mDataProp" : function(row,eType) {return '<a href="#">' + row.username + '</a>';}},
 									  {"mDataProp" : "date"},
 									  {"mDataProp" : "transaction"},
 									  {"mDataProp" : "category"},
