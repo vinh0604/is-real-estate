@@ -386,13 +386,14 @@ class RealEstate_Model extends CI_Model {
         $aResult['aaData'] = $query->result_array();
 
         $aCountParams = array();
-        $sQuery = 'SELECT count(*) as count FROM realestate';
+        $sQuery = 'SELECT count(*) as count FROM realestate r';
         if (!$this->session->userdata('is_admin')) {
-            $sQuery .= 'WHERE r.userid = ? ';
-            $aCountParams[] = $this->session->userdata('user_id');
+            $sQuery .= ' WHERE r.userid = ? ';
+            $aCountParams[] = $this->session->userdata('user_id');            
         }
         $aResult['iTotalRecords'] = $this->db->query($sQuery, $aCountParams)->row()->count;
 
+        
         return $aResult;
     }
 
