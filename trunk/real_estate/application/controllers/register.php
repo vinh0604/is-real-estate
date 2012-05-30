@@ -36,7 +36,7 @@ class Register extends CI_Controller {
     function DoRegister() {
         $account = array
             ("username" => $this->input->post("username"),
-            "password" => md5($this->input->post("password")),
+            "password" => ($this->input->post("password")),
             "email" => $this->input->post("email"),
             "name" => $this->input->post("fullname"),
             "gender" => ($this->input->post('gender') == 1) ? "Nam" : "Nữ",
