@@ -159,8 +159,8 @@
 							</select>
 						</td>
 						<td>
-							<label for="unit">Đơn vị tính (*):</label>
-							<input type="text" name="unit" id="unit" style="width: 71px;"  class="validate[required]" value="<?=$realEstate['unit']?>"/>
+							<label for="unit">Đơn vị tính:</label>
+							<input type="text" name="unit" id="unit" style="width: 71px;"  value="<?=$realEstate['unit']?>"/>
 						</td>
 					</tr>
 					<tr>
