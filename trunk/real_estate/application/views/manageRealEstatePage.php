@@ -28,7 +28,7 @@
 						"bJQueryUI": true,
 						"aoColumns": [{"mDataProp" : function(row,eType) { return '<input type="checkbox" name="a_id[]" value="' + row.realestateid + '"/>';},"bSortable": false,"bSearchable": false,"sWidth" :"30px"},
 									  {"mDataProp" : "title","sWidth" :"200px"},
-									  {"mDataProp" : function(row,eType) {return '<a href="<?=base_url()?>index.php/user/' + row.userid + '">' + row.username + '</a>';},"bVisible": <?=(array_key_exists('is_admin',$userdata) && $userdata['is_admin']) ? 'true' : 'false'?>},
+									  {"mDataProp" : function(row,eType) {return '<a href="#">' + row.username + '</a>';},"bVisible": <?=(array_key_exists('is_admin',$userdata) && $userdata['is_admin']) ? 'true' : 'false'?>},
 									  {"mDataProp" : "date"},
 									  {"mDataProp" : "transaction"},
 									  {"mDataProp" : "category"},
