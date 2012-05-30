@@ -145,8 +145,8 @@
 							</select>
 						</td>
 						<td>
-							<label for="unit">Đơn vị tính (*):</label>
-							<input type="text" name="unit" id="unit" style="width: 71px;"  class="validate[required]"/>
+							<label for="unit">Đơn vị tính :</label>
+							<input type="text" name="unit" id="unit" style="width: 71px;"/>
 						</td>
 					</tr>
 					<tr>
