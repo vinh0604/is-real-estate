@@ -1,0 +1,1 @@
+This project aims to create a system which helps posting and finding real estate on sale.
